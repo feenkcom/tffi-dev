@@ -83,5 +83,25 @@ Reimplement callback instantiation from an address:
     classified: eachMethod protocol ] ]
 ```
 
+Returning a structure by pointer does not work, so we have to redefine all such cases as `void *`
 
+```
+LGitCommit >> commit_author: commit
+	
+	^ self
+		call: #(void * git_commit_author #(self))
+		options: #()
+```
 
+```
+
+LGitId >> hexString
+	| string |
+	self isExternal
+		ifFalse: [ ^ handle hex ].
+	string := ByteArray new: 40.
+	string pin.
+	self oid_fmt: string id: self.
+	string unpin.
+	^ string asString
+```
