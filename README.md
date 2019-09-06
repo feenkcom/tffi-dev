@@ -49,6 +49,32 @@ ExternalAddress >> asExternalAddress
 	^ self
 ```
 
+```
+ExternalAddress >> thunk
+	^ self
+```
+
+```
+TLGitCalloutTrait >> call: fnSpec
+	<ffiCalloutTranslator>
+	
+	^ (self ffiCalloutIn: thisContext sender)
+		convention: self ffiCallingConvention;
+		options: self ffiLibrary uniqueInstance options;
+		function: fnSpec module: self ffiLibrary uniqueInstance moduleName
+```
+
+```
+TLGitCalloutTrait >> call: fnSpec options: options
+	<ffiCalloutTranslator>
+	
+	^ (self ffiCalloutIn: thisContext sender)
+		convention: self ffiCallingConvention;
+		options: (self ffiLibrary options), options;
+		function: fnSpec module: self ffiLibrary uniqueInstance moduleName
+```
+
+
 Reimplement callback instantiation from an address:
 ```
 (LGitStructWithDefaults allSubclasses, { LGitDiffSimilarityMetric . LGitPackbuilderForeachPayload }) do: [ :eachSubclass |
