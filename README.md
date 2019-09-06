@@ -25,6 +25,11 @@ LGitCallback >> ffiLibraryName
 ```
 
 ```
+LGitCallback class >> null
+	^ ExternalAddress null
+```
+
+```
 LGitCallback class >> ffiLibraryName
 	^ LGitLibrary
 ```
@@ -38,3 +43,19 @@ LGitLibrary >> calloutAPIClass
 LGitLibrary >> runner 
 	^ TFSameThreadRunner new
 ```
+
+```
+ExternalAddress >> asExternalAddress
+	^ self
+```
+
+Reimplement callback instantiation from an address:
+```
+(LGitStructWithDefaults allSubclasses, { LGitDiffSimilarityMetric . LGitPackbuilderForeachPayload }) do: [ :eachSubclass |
+  eachSubclass methods do: [ :eachMethod | eachSubclass
+    compile: (eachMethod sourceCode copyReplaceAll: 'ExternalAddress fromAddress: anObject thunk address' with: 'anObject thunk asExternalAddress')
+    classified: eachMethod protocol ] ]
+```
+
+
+
