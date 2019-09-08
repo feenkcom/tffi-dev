@@ -1,5 +1,6 @@
-# tffi-hack
-A hack to make Iceberg work with TFFI
+# tffi-dev
+
+Temporary repository while we get Pharo 8 working with Threaded FFI.
 
 ## Load TFFI in Pharo8 with headless vm
 ````
