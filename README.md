@@ -12,7 +12,37 @@ curl get.pharo.org/64/80+vmHeadlessLatest | bash
 
 Since `tffi-dev` over-writes methods in the core repositories it is worthwhile having access to the history there:
 
-`TBC`
+```
+| iceRep repository remoteUrl location subdirectory userName projectName githubRepository remote |
+
+"If you have a private fork of the pharo repository, set your username below (as a String) and it will be added as a remote"
+userName := nil.
+projectName := 'pharo'.
+
+repository := IceRepository registry detect: [ :each | each name = 'pharo' ].
+remoteUrl := 'git@github.com:pharo-project/pharo.git'.
+location := (FileLocator imageDirectory / 'pharo-local/iceberg/pharo-project/pharo') resolve.
+subdirectory := 'src'.
+iceRep := IceRepositoryCreator new 
+				repository: repository;
+				remote: (IceGitRemote url: remoteUrl);
+				location: location;
+				subdirectory: subdirectory;
+				createRepository.
+
+
+userName ifNotNil: [ 
+	githubRepository := IceGitHubAPI new 
+		beAnonymous;
+		getRepository: userName project: projectName.
+	remoteUrl := 'git@github.com:', userName, '/pharo.git'.
+	remote := IceGitRemote name: userName url: remoteUrl.
+	repository addRemote: remote.
+	remote fetch ].
+```
+
+It would then be worthwhile to repair the repository and create a branch from the image's commit (to be automated).
+
 
 Load Threaded FFI and then the Iceberg extensions:
 
