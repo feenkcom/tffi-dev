@@ -2,7 +2,8 @@ Extension { #name : #LGitCommit }
 
 { #category : #'*GToolkit-Iceberg' }
 LGitCommit >> author [
-	^ LGitSignature fromHandle: (self commit_author: self)
+
+	^ LGitSignature fromHandle: (self commit_author: self) asExternalAddress
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -23,10 +24,10 @@ LGitCommit >> commit_committer: commit [
 
 { #category : #'*GToolkit-Iceberg' }
 LGitCommit >> committer [
-	^ LGitSignature fromHandle: (self commit_committer: self)
+	^ LGitSignature fromHandle: (self commit_committer: self) asExternalAddress
 ]
 
 { #category : #'*GToolkit-Iceberg' }
 LGitCommit >> committerStruct [
-	^ LGitSignature fromHandle: (self commit_committer: self)
+	^ LGitSignature fromHandle: (self commit_committer: self) asExternalAddress
 ]
