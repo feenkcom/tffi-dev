@@ -93,6 +93,6 @@ LGitRemoteCallbacks >> prim_update_tips: anObject [
 { #category : #'*GToolkit-Iceberg' }
 LGitRemoteCallbacks >> remote_init_callbacks: opts version: version [ 
 	^ self
-		call: #(LGitReturnCodeEnum git_remote_init_callbacks(LGitRemoteCallbacks * self, LGitStructVersionsEnum version))
+		call: #(LGitReturnCodeEnum git_remote_init_callbacks(void * self, LGitStructVersionsEnum version))
 		options: #(  )
 ]
