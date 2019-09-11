@@ -2,7 +2,9 @@ Extension { #name : #LGitLibrary }
 
 { #category : #'*GToolkit-Iceberg' }
 LGitLibrary >> calloutAPIClass [
-	^ TFCalloutAPI
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ TFCalloutAPI ]
+		ifFalse: [ super calloutAPIClass ]
 ]
 
 { #category : #'*GToolkit-Iceberg' }
