@@ -49,15 +49,15 @@ Load Threaded FFI and then the Iceberg extensions:
 ```
 EpMonitor current disable.
 [ 
-	Metacello new
-		baseline: 'ThreadedFFI';
-		repository: 'github://pharo-project/threadedFFI-Plugin/src';
-		load
+Metacello new
+	baseline: 'ThreadedFFI';
+	repository: 'github://pharo-project/threadedFFI-Plugin/src';
+	load.
 
-	Metacello new
-		baseline: 'GtThreadedFFIDev';
-		repository: 'github://feenkcom/tffi-dev/src';
-		load.
+Metacello new
+	baseline: 'GtThreadedFFIDev';
+	repository: 'github://feenkcom/tffi-dev/src';
+	load.
 
 ] ensure: [ EpMonitor current enable ].
 ```
