@@ -62,6 +62,13 @@ Metacello new
 ] ensure: [ EpMonitor current enable ].
 ```
 
+To then run Pharo:
+
+```
+./pharo Pharo.image eval --no-quit 'UIManager default: BlBlocUIManager new. GtWorld open.'
+```
+
+
 
 # Obsolete Notes
 
