@@ -10,6 +10,13 @@ The latest version may be retrieved with zeroconf:
 curl get.pharo.org/64/80+vmHeadlessLatest | bash
 ```
 
+Start Pharo in the normal manner:
+
+```
+./pharo-ui Pharo.image
+```
+
+
 Since `tffi-dev` over-writes methods in the core repositories it is worthwhile having access to the history there:
 
 ```
