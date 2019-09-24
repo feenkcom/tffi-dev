@@ -69,21 +69,27 @@ Metacello new
 ] ensure: [ EpMonitor current enable ].
 ```
 
-To then run Pharo:
+Gtoolkit and other packages can then be loaded as normal:
+
+```
+EpMonitor current disable.
+[ 
+  Metacello new
+    baseline: 'GToolkit';
+    repository: 'github://feenkcom/gtoolkit/src';
+    load
+] ensure: [ EpMonitor current enable ].
+```
+
+
+To then run Pharo with Bloc graphics:
 
 ```
 ./pharo Pharo.image eval --no-quit 'UIManager default: BlBlocUIManager new. GtWorld open.'
 ```
 
-
-
-# Obsolete Notes
-
-Reimplement callback instantiation from an address:
+To run Pharo with the old Morphic world:
 
 ```
-(LGitStructWithDefaults allSubclasses, { LGitDiffSimilarityMetric . LGitPackbuilderForeachPayload }) do: [ :eachSubclass |
-  eachSubclass methods do: [ :eachMethod | eachSubclass
-    compile: (eachMethod sourceCode copyReplaceAll: 'ExternalAddress fromAddress: anObject thunk address' with: 'anObject thunk asExternalAddress')
-    classified: eachMethod protocol ] ]
+./pharo-ui Pharo.image
 ```
