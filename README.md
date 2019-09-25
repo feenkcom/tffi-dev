@@ -51,7 +51,7 @@ userName ifNotNil: [
 It would then be worthwhile to repair the repository and create a branch from the image's commit (to be automated).
 
 
-Load Threaded FFI and then the Iceberg extensions:
+Load Threaded FFI, Iceberg / libgit extensions:
 
 ```
 EpMonitor current disable.
@@ -65,6 +65,8 @@ Metacello new
 	baseline: 'GtThreadedFFIDev';
 	repository: 'github://feenkcom/tffi-dev/src';
 	load.
+
+MethodDictionaryConsistencyTest recompileInconsistent.
 
 ] ensure: [ EpMonitor current enable ].
 ```
