@@ -7,7 +7,7 @@ TLGitCalloutTrait >> call: fnSpec [
 		cdecl;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ (self ffiCalloutIn: thisContext sender)
+	^ (self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
 		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
@@ -21,7 +21,7 @@ TLGitCalloutTrait >> call: fnSpec options: options [
 		options: options;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ (self ffiCalloutIn: thisContext sender)
+	^ (self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
 		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
