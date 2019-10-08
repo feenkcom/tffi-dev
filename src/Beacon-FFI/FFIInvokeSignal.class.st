@@ -29,7 +29,8 @@ Class {
 	#superclass : #BeaconSignal,
 	#instVars : [
 		'function',
-		'arguments'
+		'arguments',
+		'return'
 	],
 	#classVars : [
 		'Enabled'
@@ -92,20 +93,32 @@ FFIInvokeSignal >> printOn: aStream [
 		(function flags anyMask: flag) ifTrue:
 			[aStream nextPutAll: modifier; space]].
 	aStream print: function argTypes first; space.
-	self name == nil
-		ifTrue:[aStream nextPutAll:'(*) ']
-		ifFalse:[aStream << function name asString; space].
+	self name
+		ifNil: [aStream nextPutAll:'(*) ']
+		ifNotNil: [aStream << function name asString; space].
 	aStream nextPut:$(.
 	2 to: function argTypes size do:[:i|
 		aStream print: (function argTypes at: i).
 		i < function argTypes size ifTrue:[aStream space]].
 	aStream nextPut: $).
 	aStream cr.
+	aStream
+		<< 'Function: ';
+		<< function getHandle ffiArgumentString;
+		cr;
+		<< 'Arguments:';
+		cr.
 	arguments do: [ :each |
 		aStream
 			<< '    ';
 			<< each ffiArgumentString;
-			cr. ]
+			cr. ].
+	aStream
+		<< 'Return:';
+		cr;
+		<< '    ';
+		<< return ffiArgumentString.
+
 ]
 
 { #category : #printing }
@@ -128,4 +141,14 @@ FFIInvokeSignal >> printOneLineContentsOn: aStream [
 		aStream print: (function argTypes at: i).
 		i < function argTypes size ifTrue:[aStream space]].
 	aStream nextPut: $).
+]
+
+{ #category : #accessing }
+FFIInvokeSignal >> return [
+	^ return
+]
+
+{ #category : #accessing }
+FFIInvokeSignal >> return: anObject [
+	return := anObject
 ]
