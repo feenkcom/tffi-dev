@@ -1,6 +1,6 @@
 Extension { #name : #LGitIndex }
 
-{ #category : #'*Beacon-FFI' }
+{ #category : #'*GToolkit-Iceberg' }
 LGitIndex >> index_add_all: index pathspec: pathspec flags: flags callback: callback payload: payload [
 	
 	"^ self

@@ -1,6 +1,6 @@
 Extension { #name : #LGitDiff }
 
-{ #category : #'*Beacon-FFI' }
+{ #category : #'*GToolkit-Iceberg' }
 LGitDiff >> diff_foreach: diff file_cb: file_cb binary_cb: binary_cb hunk_cb: hunk_cb line_cb: line_cb payload: payload [
 	
 	"^ self
