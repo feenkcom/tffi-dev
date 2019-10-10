@@ -85,22 +85,7 @@ FFIInvokeSignal >> function: anObject [
 { #category : #printing }
 FFIInvokeSignal >> printOn: aStream [
 
-	aStream
-		nextPut:$<;
-		nextPutAll: function callingConventionString; nextPutAll:': '.
-	{ 'threaded' } with: { function class callingConventionModifierFor: 'threaded' } do:
-		[:modifier :flag|
-		(function flags anyMask: flag) ifTrue:
-			[aStream nextPutAll: modifier; space]].
-	aStream print: function argTypes first; space.
-	self name
-		ifNil: [aStream nextPutAll:'(*) ']
-		ifNotNil: [aStream << function name asString; space].
-	aStream nextPut:$(.
-	2 to: function argTypes size do:[:i|
-		aStream print: (function argTypes at: i).
-		i < function argTypes size ifTrue:[aStream space]].
-	aStream nextPut: $).
+	super printOn: aStream.
 	aStream cr.
 	aStream
 		<< 'Function: ';
@@ -114,7 +99,7 @@ FFIInvokeSignal >> printOn: aStream [
 			<< each ffiArgumentString;
 			cr. ].
 	aStream
-		<< 'Return:';
+		<< 'Return type:';
 		cr;
 		<< '    ';
 		<< return ffiArgumentString.

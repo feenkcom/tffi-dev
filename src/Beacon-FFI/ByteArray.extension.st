@@ -8,7 +8,9 @@ ByteArray >> ffiArgumentString [
 		pinned := self pinInMemory.
 		stream
 			print: self class name;
-			<< ' @ ';
+			<< '[';
+			print: self size;
+			<< '] @ ';
 			print: (PointerUtils primOopForObject: self).
 		pinned ifFalse: [ self unpinInMemory ] ].
 ]

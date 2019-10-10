@@ -4,11 +4,18 @@ Extension { #name : #ExternalFunction }
 ExternalFunction >> invokeWithArguments: argArray [
 	"Manually invoke the receiver, representing an external function."
 
+	| result |
+
 	FFIInvokeSignal new
 		function: self;
 		arguments: argArray;
 		emit.
-	^self primInvokeWithArguments: argArray
+	result := self primInvokeWithArguments: argArray.
+	FFIResultSignal new
+		function: self;
+		result: result;
+		emit.
+	^result
 ]
 
 { #category : #'*Beacon-FFI' }
