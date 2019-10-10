@@ -1,7 +1,43 @@
 Extension { #name : #LGitDiff }
 
 { #category : #'*GToolkit-Iceberg' }
-LGitDiff >> diff_foreach: diff file_cb: file_cb binary_cb: binary_cb hunk_cb: hunk_cb line_cb: line_cb payload: payload [
+LGitDiff >> filesDo: filesBlockOrNil binaryFilesDo: binaryBlockOrNil hunksDo: hunksBlockOrNil linesDo: linesBlockOrNil [
+	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
+		self
+		tFFIdiff_foreach: self
+		file_cb: (filesBlockOrNil 
+			ifNotNil: [ LGitDiffFileCallback on: filesBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		binary_cb: (binaryBlockOrNil 
+			ifNotNil: [ 	LGitDiffBinaryCallback on: binaryBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		hunk_cb: (hunksBlockOrNil 
+			ifNotNil: [ 	LGitDiffHunkCallback on: hunksBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		line_cb: (linesBlockOrNil 
+			ifNotNil: [ 	LGitDiffLineCallback on: linesBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		payload: ExternalAddress null ]
+	ifFalse: [ 
+		self
+		diff_foreach: self
+		file_cb: (filesBlockOrNil 
+			ifNotNil: [ LGitDiffFileCallback on: filesBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		binary_cb: (binaryBlockOrNil 
+			ifNotNil: [ 	LGitDiffBinaryCallback on: binaryBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		hunk_cb: (hunksBlockOrNil 
+			ifNotNil: [ 	LGitDiffHunkCallback on: hunksBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		line_cb: (linesBlockOrNil 
+			ifNotNil: [ 	LGitDiffLineCallback on: linesBlockOrNil ]
+			ifNil: [ LGitCallback null ])
+		payload: ExternalAddress null ]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+LGitDiff >> tFFIdiff_foreach: diff file_cb: file_cb binary_cb: binary_cb hunk_cb: hunk_cb line_cb: line_cb payload: payload [
 	
 	"^ self
 		call:

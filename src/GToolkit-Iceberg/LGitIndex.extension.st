@@ -1,7 +1,49 @@
 Extension { #name : #LGitIndex }
 
 { #category : #'*GToolkit-Iceberg' }
-LGitIndex >> index_add_all: index pathspec: pathspec flags: flags callback: callback payload: payload [
+LGitIndex >> addAll [
+	| pathspec |
+	pathspec := LGitStringArray withAll: #().
+	self withReturnHandlerDo: [ 
+		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
+			self
+			tFFIindex_add_all: self
+			pathspec: pathspec
+			flags: 0
+			callback: (LGitIndexMatchedPathCallback on: [ :a :b :c | 0 ])
+			payload: ExternalAddress null ]
+	ifFalse: [ 
+		self
+			index_add_all: self
+			pathspec: pathspec
+			flags: 0
+			callback: (LGitIndexMatchedPathCallback on: [ :a :b :c | 0 ])
+			payload: ExternalAddress null ] ]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+LGitIndex >> addAll: pathSpecs [
+	| pathspec |
+	pathspec := LGitStringArray withAll: pathSpecs.
+	self withReturnHandlerDo: [ 
+		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
+			self
+			tFFIindex_add_all: self
+			pathspec: pathspec
+			flags: 0
+			callback: (LGitIndexMatchedPathCallback on: [ :a :b :c | 0 ])
+			payload: ExternalAddress null ]
+	ifFalse: [ 
+		self
+			index_add_all: self
+			pathspec: pathspec
+			flags: 0
+			callback: (LGitIndexMatchedPathCallback on: [ :a :b :c | 0 ])
+			payload: ExternalAddress null ] ]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+LGitIndex >> tFFIindex_add_all: index pathspec: pathspec flags: flags callback: callback payload: payload [
 	
 	"^ self
 		call:
