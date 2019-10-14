@@ -2,24 +2,7 @@ Extension { #name : #LGitDiff }
 
 { #category : #'*GToolkit-Iceberg' }
 LGitDiff >> filesDo: filesBlockOrNil binaryFilesDo: binaryBlockOrNil hunksDo: hunksBlockOrNil linesDo: linesBlockOrNil [
-	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-		tFFIdiff_foreach: self
-		file_cb: (filesBlockOrNil 
-			ifNotNil: [ LGitDiffFileCallback on: filesBlockOrNil ]
-			ifNil: [ LGitCallback null ])
-		binary_cb: (binaryBlockOrNil 
-			ifNotNil: [ 	LGitDiffBinaryCallback on: binaryBlockOrNil ]
-			ifNil: [ LGitCallback null ])
-		hunk_cb: (hunksBlockOrNil 
-			ifNotNil: [ 	LGitDiffHunkCallback on: hunksBlockOrNil ]
-			ifNil: [ LGitCallback null ])
-		line_cb: (linesBlockOrNil 
-			ifNotNil: [ 	LGitDiffLineCallback on: linesBlockOrNil ]
-			ifNil: [ LGitCallback null ])
-		payload: ExternalAddress null ]
-	ifFalse: [ 
-		self
+	^ self
 		diff_foreach: self
 		file_cb: (filesBlockOrNil 
 			ifNotNil: [ LGitDiffFileCallback on: filesBlockOrNil ]
@@ -33,7 +16,7 @@ LGitDiff >> filesDo: filesBlockOrNil binaryFilesDo: binaryBlockOrNil hunksDo: hu
 		line_cb: (linesBlockOrNil 
 			ifNotNil: [ 	LGitDiffLineCallback on: linesBlockOrNil ]
 			ifNil: [ LGitCallback null ])
-		payload: ExternalAddress null ]
+		payload: ExternalAddress null
 ]
 
 { #category : #'*GToolkit-Iceberg' }

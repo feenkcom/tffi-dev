@@ -5,22 +5,13 @@ LGitRemote >> fetch [
 	self isReady ifFalse: [ self create ].
 
 	self withReturnHandlerDo: [ 
-		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-			tFFIremote_fetch: self
-			refspecs: self ffiNull handle
-			opts: (LGitFetchOptions defaults
-				callbacks: LGitRemoteCallbacks defaults;
-				yourself)
-			reflog_message: nil ]
-		ifFalse: [ 
 		self
 			remote_fetch: self
 			refspecs: self ffiNull handle
 			opts: (LGitFetchOptions defaults
 				callbacks: LGitRemoteCallbacks defaults;
 				yourself)
-			reflog_message: nil ] ]
+			reflog_message: nil ]
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -33,15 +24,6 @@ LGitRemote >> fetchWithCredentials: aCredentialsProvider andProgressCallback: pr
 		callbacks := LGitRemoteCallbacks withProvider: aCredentialsProvider.
 		progressCallback ifNotNil: [callbacks transferProgress: progressCallback].
 
-		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-			tFFIremote_fetch: self
-			refspecs: refSpecs
-			opts: (LGitFetchOptions defaults
-				callbacks:callbacks;
-				yourself)
-			reflog_message: nil ]
-		ifFalse: [ 
 		self
 			remote_fetch: self
 			refspecs: refSpecs
@@ -49,7 +31,7 @@ LGitRemote >> fetchWithCredentials: aCredentialsProvider andProgressCallback: pr
 				callbacks:callbacks;
 				yourself)
 			reflog_message: nil 
-		] ]
+		]
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -57,18 +39,11 @@ LGitRemote >> fetchWithMessage: aString [
 	self create.
 
 	self withReturnHandlerDo: [ 
-		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-			tFFIremote_fetch: self
-			refspecs: nil
-			opts: LGitFetchOptions defaults
-			reflog_message: aString ]
-		ifFalse: [ 
 		self
 			remote_fetch: self
 			refspecs: nil
 			opts: LGitFetchOptions defaults
-			reflog_message: aString ] ]
+			reflog_message: aString ]
 
 ]
 
@@ -77,22 +52,13 @@ LGitRemote >> fetchWithMessage: aString credentials: aCredentialsProvider [
 	self create.
 		
 	self withReturnHandlerDo: [ 
-		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-			tFFIremote_fetch: self
-			refspecs: nil
-			opts: (LGitFetchOptions defaults
-				callbacks: (LGitRemoteCallbacks withProvider: aCredentialsProvider);
-				yourself)
-			reflog_message: aString ]
-		ifFalse: [ 
 		self
 			remote_fetch: self
 			refspecs: nil
 			opts: (LGitFetchOptions defaults
 				callbacks: (LGitRemoteCallbacks withProvider: aCredentialsProvider);
 				yourself)
-			reflog_message: aString ] ]
+			reflog_message: aString ]
 
 ]
 
@@ -104,18 +70,11 @@ LGitRemote >> pullWithFetchOptions: fetchOptions [
 	self lookup.
 	
 	self withReturnHandlerDo: [ 
-		ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-		self
-			tFFIremote_fetch: self
-			refspecs: nil
-			opts: fetchOptions
-			reflog_message: 'automatic pull from libgit2' ]
-		ifFalse: [ 
 		self
 			remote_fetch: self
 			refspecs: nil
 			opts: fetchOptions
-			reflog_message: 'automatic pull from libgit2' ] ].
+			reflog_message: 'automatic pull from libgit2' ].
 	
 	"assume that there are no conflicts and fast-forwad to FETCH_HEAD"
 	self repository fastForward

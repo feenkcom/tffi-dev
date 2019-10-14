@@ -10,7 +10,7 @@ TLGitCalloutTrait >> call: fnSpec [
 	^ (self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -24,7 +24,7 @@ TLGitCalloutTrait >> call: fnSpec options: options [
 	^ (self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -38,5 +38,5 @@ TLGitCalloutTrait >> callUnchecked: fnSpec options: options [
 	^ (self ffiCalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
 ]

@@ -3,16 +3,10 @@ Extension { #name : #LGitRepository }
 { #category : #'*GToolkit-Iceberg' }
 LGitRepository >> resetHardTo: target checkoutOptions: options [
 
-	^ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
-	 self
-		tFFIresetTo: target
-		resetType: LGitResetTypeEnum git_reset_hard
-		checkoutOptions: options ]
-	ifFalse: [ 
-	 self
+	^self
 		resetTo: target
 		resetType: LGitResetTypeEnum git_reset_hard
-		checkoutOptions: options ]
+		checkoutOptions: options
 ]
 
 { #category : #'*GToolkit-Iceberg' }
