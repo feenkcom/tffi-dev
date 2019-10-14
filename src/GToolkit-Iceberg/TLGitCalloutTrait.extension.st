@@ -7,10 +7,17 @@ TLGitCalloutTrait >> call: fnSpec [
 		cdecl;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ (self safeFFICalloutIn: thisContext sender)
+	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
+	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
 		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	] ifFalse: [
+	(self safeFFICalloutIn: thisContext sender)
+		convention: self ffiCallingConvention;
+		options: self ffiLibrary uniqueInstance options;
+		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	].
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -21,10 +28,17 @@ TLGitCalloutTrait >> call: fnSpec options: options [
 		options: options;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ (self safeFFICalloutIn: thisContext sender)
+	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
+	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
 		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	] ifFalse: [
+	(self safeFFICalloutIn: thisContext sender)
+		convention: self ffiCallingConvention;
+		options: (self ffiLibrary options), options;
+		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	].
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -35,8 +49,15 @@ TLGitCalloutTrait >> callUnchecked: fnSpec options: options [
 		options: options;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ (self ffiCalloutIn: thisContext sender)
+	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
+	(self ffiCalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
 		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	] ifFalse: [
+	(self ffiCalloutIn: thisContext sender)
+		convention: self ffiCallingConvention;
+		options: (self ffiLibrary options), options;
+		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+	].
 ]
