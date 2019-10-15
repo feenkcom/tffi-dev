@@ -27,21 +27,16 @@ Class {
 ThreadedFFIMigration class >> getThreadedFFIAvailable [
 	"Determine whether threaded ffi is available and set the flag"
 
-	| libcPID tffiPID runner function result |
+	| result ba |
 
 	result := false.
 	[ 
-		libcPID := LibC uniqueInstance currentProcessId.
-		runner := TFWorker default.
-		function := TFExternalFunction
-			name: 'getpid'
-			moduleName: 'libc.so.6'
-			definition:
-				(TFFunctionDefinition
-					parameterTypes: {}
-					returnType: TFBasicType uint).
-		tffiPID := runner invokeFunction: function.
-		result := tffiPID = libcPID. ]
+		ba := #[1 2 3].
+		ba pinInMemory.
+		PointerUtils oopForObject: ba.
+		ba unpinInMemory.
+		result := true.
+	]
 			on: Error 
 			do: [ ].
 	^result
