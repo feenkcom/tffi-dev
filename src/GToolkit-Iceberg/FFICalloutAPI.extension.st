@@ -1,6 +1,15 @@
 Extension { #name : #FFICalloutAPI }
 
 { #category : #'*GToolkit-Iceberg' }
+FFICalloutAPI class >> calloutAPIClass [
+	^ThreadedFFIMigration threadedFFIAvailable ifTrue: [ 
+		TFCalloutAPI
+	] ifFalse: [ 
+	 CalloutAPIClass ifNil: [ CalloutAPIClass := self defaultCalloutAPIClass ]
+	]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
 FFICalloutAPI >> tffiFunction: functionSignature module: moduleNameOrLibrary [
 	| sender ffiMethod ffiMethodSelector |
 	sender := context ifNil: [ thisContext sender sender ].
