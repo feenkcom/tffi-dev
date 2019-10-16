@@ -5,7 +5,7 @@ TFCallbackInvocation >> execute [
 	|  returnValue |
 	
 	returnValue := callback frontendCallback valueWithArguments: self arguments.
-	FFIResultSignal new
+	TFFIResultSignal new
 		function: callback frontendCallback;
 		result: returnValue;
 		emit.

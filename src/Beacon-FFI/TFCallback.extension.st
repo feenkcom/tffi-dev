@@ -7,7 +7,7 @@ TFCallback >> register [
 	
 	self validateTypes.
 	self runner ensureInitialized.
-	FFICallbackRegisterSignal new
+	TFFICallbackRegisterSignal new
 		callback: self;
 		emit.
 	self registerCallback.

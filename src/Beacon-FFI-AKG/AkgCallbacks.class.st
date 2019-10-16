@@ -5,7 +5,8 @@ Class {
 }
 
 { #category : #'library path' }
-AkgCallbacks class >> ffiLibraryName [
+AkgCallbacks class >> ffiLibrary [
+
 	^ ThreadedFFIMigration threadedFFIAvailable
 		ifTrue: [ AkgLibTestLibrary ]
 		ifFalse: [ super ffiLibraryName ]
@@ -25,16 +26,18 @@ AkgCallbacks class >> on: aBlock [
 
 { #category : #accessing }
 AkgCallbacks >> calloutAPIClass [
+
 	^ ThreadedFFIMigration threadedFFIAvailable
 		ifTrue: [ TFCalloutAPI ]
 		ifFalse: [ super calloutAPIClass ]
 ]
 
 { #category : #accessing }
-AkgCallbacks >> ffiLibraryName [
+AkgCallbacks >> ffiLibrary [
+
 	^ ThreadedFFIMigration threadedFFIAvailable
-		ifTrue: [ self class ffiLibraryName ]
-		ifFalse: [ super ffiLibraryName ]
+		ifTrue: [ self class ffiLibrary ]
+		ifFalse: [ super ffiLibrary ]
 ]
 
 { #category : #initialization }

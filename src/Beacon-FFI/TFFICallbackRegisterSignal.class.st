@@ -1,5 +1,5 @@
 Class {
-	#name : #FFICallbackRegisterSignal,
+	#name : #TFFICallbackRegisterSignal,
 	#superclass : #BeaconSignal,
 	#instVars : [
 		'callback'
@@ -8,17 +8,17 @@ Class {
 }
 
 { #category : #accessing }
-FFICallbackRegisterSignal >> callback [
+TFFICallbackRegisterSignal >> callback [
 	^ callback
 ]
 
 { #category : #accessing }
-FFICallbackRegisterSignal >> callback: anObject [
+TFFICallbackRegisterSignal >> callback: anObject [
 	callback := anObject
 ]
 
 { #category : #printing }
-FFICallbackRegisterSignal >> printOneLineContentsOn: aStream [
+TFFICallbackRegisterSignal >> printOneLineContentsOn: aStream [
 	"hook to be overriden by subclasses"
 	
 	aStream
