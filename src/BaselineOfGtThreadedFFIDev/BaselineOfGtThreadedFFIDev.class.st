@@ -12,11 +12,12 @@ BaselineOfGtThreadedFFIDev >> baseline: spec [
 		"There's temporary logging scattered through during early development.
 		The need for Beacon-FFI should be removed eventually."
 		spec 
-			baseline: 'Beacon-FFI'
+			baseline: #BeaconFFI
 			with: [ spec repository: 'github://feenkcom/tffi-dev/src' ].
 
 		spec 
-			package: #'GToolkit-Iceberg';
+			package: #'GToolkit-Iceberg'
+				with: [ spec requires: #(#BeaconFFI) ];
 			package: #'FFI-MethodConsistency' ].
 
 ]
