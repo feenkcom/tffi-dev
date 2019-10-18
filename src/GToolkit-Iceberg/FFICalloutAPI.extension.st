@@ -12,7 +12,7 @@ FFICalloutAPI >> tffiFunction: functionSignature module: moduleNameOrLibrary [
 			builder
 				signature: functionSignature;
 				sender: sender;
-				module: moduleNameOrLibrary ].
+				library: moduleNameOrLibrary ].
 	ffiMethod
 		selector: sender selector;
 		methodClass: sender methodClass.

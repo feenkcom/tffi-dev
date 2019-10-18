@@ -11,12 +11,12 @@ TLGitCalloutTrait >> call: fnSpec [
 	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	] ifFalse: [
 	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	].
 ]
 
@@ -32,12 +32,12 @@ TLGitCalloutTrait >> call: fnSpec options: options [
 	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	] ifFalse: [
 	(self safeFFICalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	].
 ]
 
@@ -53,11 +53,11 @@ TLGitCalloutTrait >> callUnchecked: fnSpec options: options [
 	(self ffiCalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	] ifFalse: [
 	(self ffiCalloutIn: thisContext sender)
 		convention: self ffiCallingConvention;
 		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance moduleName.
+		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
 	].
 ]
