@@ -27,7 +27,11 @@ AkgLibTestLibrary >> macModuleName [
 
 { #category : #accessing }
 AkgLibTestLibrary >> runner [ 
-	^ TFSameThreadRunner new
+
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ TFSameThreadRunner new ]
+		ifFalse: [ super runner ]
+
 ]
 
 { #category : #'accessing platform' }

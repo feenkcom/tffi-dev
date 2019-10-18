@@ -33,6 +33,35 @@ Class {
 	#category : #'Beacon-FFI-AKG'
 }
 
+{ #category : #'as yet unclassified' }
+AkgFFIstuff class >> mozCallback [
+	<gtExample>
+	<script>
+
+	| result |
+
+	FFIInvokeSignal enabled: true.
+	FFIResultSignal enabled: true.
+	TFFIInvokeSignal enabled: true.
+	TFFIResultSignal enabled: true.
+	result := MozFFITest run: #testCallbackInt16.
+	"result := MozFFITest new testCallbackInt16."
+	FFIInvokeSignal enabled: false.
+	FFIResultSignal enabled: false.
+	TFFIInvokeSignal enabled: false.
+	TFFIResultSignal enabled: false.
+	self assert: result hasPassed.
+	^result
+]
+
+{ #category : #convenience }
+AkgFFIstuff class >> startConsoleLogging [
+	<script>
+
+	SignalLogger resetAllInstances.
+	NonInteractiveTranscriptLogger start.
+]
+
 { #category : #accessing }
 AkgFFIstuff >> alienCalloutFor: aDuration [
 

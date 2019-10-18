@@ -8,6 +8,5 @@ Class {
 AkgShortCallOut >> shortCallout [
 
 	^self
-		call: #(int shortCallout #())
-		options: #()
+		ffiCall: #(int shortCallout #())
 ]
