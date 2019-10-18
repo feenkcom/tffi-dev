@@ -7,17 +7,12 @@ TLGitCalloutTrait >> call: fnSpec [
 		cdecl;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
-	(self safeFFICalloutIn: thisContext sender)
+	| ffiLibrary |
+	ffiLibrary := self ffiLibrary asFFILibrary.
+	^ (ffiLibrary safeCalloutAPIClass inUFFIContext: thisContext)
 		convention: self ffiCallingConvention;
 		options: self ffiLibrary uniqueInstance options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	] ifFalse: [
-	(self safeFFICalloutIn: thisContext sender)
-		convention: self ffiCallingConvention;
-		options: self ffiLibrary uniqueInstance options;
-		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	].
+		function: fnSpec library: ffiLibrary.
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -28,17 +23,13 @@ TLGitCalloutTrait >> call: fnSpec options: options [
 		options: options;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
-	(self safeFFICalloutIn: thisContext sender)
+	| ffiLibrary |
+	ffiLibrary := self ffiLibrary asFFILibrary.
+	^ (ffiLibrary safeCalloutAPIClass inUFFIContext: thisContext)
 		convention: self ffiCallingConvention;
-		options: (self ffiLibrary options), options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	] ifFalse: [
-	(self safeFFICalloutIn: thisContext sender)
-		convention: self ffiCallingConvention;
-		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	].
+		options: (self ffiLibrary uniqueInstance options), options;
+		function: fnSpec library: ffiLibrary.
+
 ]
 
 { #category : #'*GToolkit-Iceberg' }
@@ -49,15 +40,11 @@ TLGitCalloutTrait >> callUnchecked: fnSpec options: options [
 		options: options;
 		function: fnSpec module: self ffiLibraryName"
 
-	^ ThreadedFFIMigration threadedFFIAvailable ifTrue: [
-	(self ffiCalloutIn: thisContext sender)
+	| ffiLibrary |
+	ffiLibrary := self ffiLibrary asFFILibrary.
+	^ (ffiLibrary calloutAPIClass inUFFIContext: thisContext)
 		convention: self ffiCallingConvention;
-		options: (self ffiLibrary options), options;
-		tffiFunction: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	] ifFalse: [
-	(self ffiCalloutIn: thisContext sender)
-		convention: self ffiCallingConvention;
-		options: (self ffiLibrary options), options;
-		function: fnSpec module: self ffiLibrary uniqueInstance libraryName.
-	].
+		options: (self ffiLibrary uniqueInstance options), options;
+		function: fnSpec library: ffiLibrary.
+
 ]

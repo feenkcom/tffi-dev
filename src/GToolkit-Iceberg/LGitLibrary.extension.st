@@ -9,5 +9,16 @@ LGitLibrary >> calloutAPIClass [
 
 { #category : #'*GToolkit-Iceberg' }
 LGitLibrary >> runner [ 
-	^ TFSameThreadRunner new
+
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ TFSameThreadRunner new ]
+		ifFalse: [ super runner ]
+
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+LGitLibrary >> safeCalloutAPIClass [
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ TFLGitSafeFFICalloutAPI ]
+		ifFalse: [ super calloutAPIClass ]
 ]
