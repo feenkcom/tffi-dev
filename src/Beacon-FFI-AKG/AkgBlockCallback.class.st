@@ -13,5 +13,5 @@ AkgBlockCallback class >> fnSpec [
 { #category : #'instance creation' }
 AkgBlockCallback class >> timesTwo [
 
-	^self on: [ :a | a * 2 ]
+	^self on: [ :a | MethodStackSignal emit. a * 2 ]
 ]

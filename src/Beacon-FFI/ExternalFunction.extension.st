@@ -6,15 +6,15 @@ ExternalFunction >> invokeWithArguments: argArray [
 
 	| result |
 
-	"FFIInvokeSignal new
+	FFIInvokeSignal new
 		function: self;
 		arguments: argArray;
-		emit."
+		emit.
 	result := self primInvokeWithArguments: argArray.
-	"FFIResultSignal new
+	FFIResultSignal new
 		function: self;
 		result: result;
-		emit."
+		emit.
 	^result
 ]
 
