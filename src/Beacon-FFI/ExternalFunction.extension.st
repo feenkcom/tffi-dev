@@ -6,7 +6,9 @@ ExternalFunction >> invokeWithArguments: argArray [
 
 	| result |
 
-	FFIInvokeSignal new
+	<primitive: 'primitiveCalloutWithArgs' module: 'SqueakFFIPrims' error: ec>
+	^self externalCallFailed
+	"FFIInvokeSignal new
 		function: self;
 		arguments: argArray;
 		emit.
@@ -15,7 +17,7 @@ ExternalFunction >> invokeWithArguments: argArray [
 		function: self;
 		result: result;
 		emit.
-	^result
+	^result"
 ]
 
 { #category : #'*Beacon-FFI' }
