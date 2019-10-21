@@ -1,14 +1,15 @@
 Extension { #name : #ExternalFunction }
 
-{ #category : #'*Beacon-FFI' }
+{ #category : #'*GToolkit-Iceberg' }
 ExternalFunction >> invokeWithArguments: argArray [
 	"Manually invoke the receiver, representing an external function."
 
 	| result |
 
-	<primitive: 'primitiveCalloutWithArgs' module: 'SqueakFFIPrims' error: ec>
-	^self externalCallFailed
-	"FFIInvokeSignal new
+	(Smalltalk includesKey: #FFIInvokeSignal) ifFalse: 
+		[ self primInvokeWithArguments: argArray ].
+
+	FFIInvokeSignal new
 		function: self;
 		arguments: argArray;
 		emit.
@@ -17,10 +18,10 @@ ExternalFunction >> invokeWithArguments: argArray [
 		function: self;
 		result: result;
 		emit.
-	^result"
+	^result
 ]
 
-{ #category : #'*Beacon-FFI' }
+{ #category : #'*GToolkit-Iceberg' }
 ExternalFunction >> primInvokeWithArguments: argArray [
 	"Manually invoke the receiver, representing an external function."
 	<primitive: 'primitiveCalloutWithArgs' module: 'SqueakFFIPrims' error: ec>

@@ -1,9 +1,13 @@
 Extension { #name : #TFCallbackInvocation }
 
-{ #category : #'*Beacon-FFI' }
+{ #category : #'*GToolkit-Iceberg' }
 TFCallbackInvocation >> execute [ 
 	|  returnValue |
-	
+
+	TFFICallbackSignal new 
+		block: callback frontendCallback block;
+		arguments: self arguments;
+		emit.
 	returnValue := callback frontendCallback valueWithArguments: self arguments.
 	TFFIResultSignal new
 		function: callback frontendCallback;

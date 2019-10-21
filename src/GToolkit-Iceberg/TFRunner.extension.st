@@ -5,18 +5,23 @@ TFRunner >> invokeFunction: aTFExternalFunction withArguments: aCollection [
 
 	| result |
 
-	"TFFIInvokeSignal new
+	(Smalltalk includesKey: #TFFIInvokeSignal) ifFalse: 
+		[ ^aTFExternalFunction newCall
+		parameters: aCollection;
+		executeOn: self ].
+
+	TFFIInvokeSignal new
 		function: aTFExternalFunction;
 		arguments: aCollection;
-		emit."
+		emit.
 
 	result := aTFExternalFunction newCall
 		parameters: aCollection;
 		executeOn: self.
 
-	"TFFIResultSignal new
+	TFFIResultSignal new
 		function: aTFExternalFunction;
 		result: result;
-		emit."
+		emit.
 	^result
 ]

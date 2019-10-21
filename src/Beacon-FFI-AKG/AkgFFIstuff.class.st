@@ -33,7 +33,7 @@ Class {
 	#category : #'Beacon-FFI-AKG'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #convenience }
 AkgFFIstuff class >> mozCallback [
 	<gtExample>
 	<script>
@@ -60,6 +60,40 @@ AkgFFIstuff class >> startConsoleLogging [
 
 	SignalLogger resetAllInstances.
 	NonInteractiveTranscriptLogger start.
+]
+
+{ #category : #convenience }
+AkgFFIstuff class >> startFFILogging [
+	<script>
+
+	FFIInvokeSignal enabled: true.
+	FFIResultSignal enabled: true.
+	FFICallbackSignal enabled: true.
+	TFFIInvokeSignal enabled: true.
+	TFFIResultSignal enabled: true.
+	TFFICallbackSignal enabled: true.
+
+]
+
+{ #category : #convenience }
+AkgFFIstuff class >> startLogging [
+	<script>
+
+	self startConsoleLogging.
+	self startFFILogging.
+]
+
+{ #category : #convenience }
+AkgFFIstuff class >> stopFFILogging [
+	<script>
+
+	FFIInvokeSignal enabled: false.
+	FFIResultSignal enabled: false.
+	FFICallbackSignal enabled: false.
+	TFFIInvokeSignal enabled: false.
+	TFFIResultSignal enabled: false.
+	TFFICallbackSignal enabled: false.
+
 ]
 
 { #category : #accessing }
