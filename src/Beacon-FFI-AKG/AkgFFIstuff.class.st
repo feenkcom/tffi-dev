@@ -59,7 +59,8 @@ AkgFFIstuff class >> startConsoleLogging [
 	<script>
 
 	SignalLogger resetAllInstances.
-	NonInteractiveTranscriptLogger start.
+	RestartingStreamLogger start.
+	RestartingStreamLogger instance stdout.
 ]
 
 { #category : #convenience }
