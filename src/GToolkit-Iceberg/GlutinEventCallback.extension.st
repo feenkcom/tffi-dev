@@ -7,3 +7,19 @@ GlutinEventCallback >> calloutAPIClass [
 		ifTrue: [ TFCalloutAPI ]
 		ifFalse: [ super calloutAPIClass ]
 ]
+
+{ #category : #'*GToolkit-Iceberg' }
+GlutinEventCallback class >> ffiLibrary [
+
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ GlutinLibrary ]
+		ifFalse: [ super ffiLibraryName ]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+GlutinEventCallback >> ffiLibrary [
+
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ self class ffiLibrary ]
+		ifFalse: [ super ffiLibrary ]
+]

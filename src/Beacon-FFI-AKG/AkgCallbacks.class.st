@@ -13,11 +13,6 @@ AkgCallbacks class >> ffiLibrary [
 ]
 
 { #category : #'instance creation' }
-AkgCallbacks class >> null [
-	^ ExternalAddress null
-]
-
-{ #category : #'instance creation' }
 AkgCallbacks class >> on: aBlock [
 	^ self 
 		signature: self fnSpec 
@@ -38,10 +33,4 @@ AkgCallbacks >> ffiLibrary [
 	^ ThreadedFFIMigration threadedFFIAvailable
 		ifTrue: [ self class ffiLibrary ]
 		ifFalse: [ super ffiLibrary ]
-]
-
-{ #category : #initialization }
-AkgCallbacks >> initializeNull [
-	
-	self beNull
 ]
