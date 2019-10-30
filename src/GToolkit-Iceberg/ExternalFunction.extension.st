@@ -1,6 +1,13 @@
 Extension { #name : #ExternalFunction }
 
 { #category : #'*GToolkit-Iceberg' }
+ExternalFunction >> address [ 
+	"TFExternalFunction compatibility"
+
+	^handle
+]
+
+{ #category : #'*GToolkit-Iceberg' }
 ExternalFunction >> invokeWithArguments: argArray [
 	"Manually invoke the receiver, representing an external function."
 

@@ -57,6 +57,30 @@ TFFIInvokeSignal >> function: anObject [
 ]
 
 { #category : #printing }
+TFFIInvokeSignal >> printOn: aStream [
+
+	super printOn: aStream.
+	aStream cr.
+	aStream
+		<< 'Function: ';
+		<< function address ffiArgumentString;
+		cr;
+		<< 'Arguments:';
+		cr.
+	arguments do: [ :each |
+		aStream
+			<< '    ';
+			<< each ffiArgumentString;
+			cr. ].
+	aStream
+		<< 'Return type:';
+		cr;
+		<< '    ';
+		<< return ffiArgumentString.
+
+]
+
+{ #category : #printing }
 TFFIInvokeSignal >> printOneLineContentsOn: aStream [
 
 	function printOn: aStream
