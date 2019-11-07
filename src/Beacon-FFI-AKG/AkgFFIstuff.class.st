@@ -55,6 +55,21 @@ AkgFFIstuff class >> mozCallback [
 ]
 
 { #category : #convenience }
+AkgFFIstuff class >> skiaExamples [
+	<gtExample>
+
+	| package group |
+
+	package := RPackageOrganizer default packageNamed: #'Sparta-Skia'.
+	group := GtExampleGroup withAll: package gtExamplesAllContained.
+	AkgFFIstuff startLogging.
+	group runAll.
+	AkgFFIstuff stopFFILogging.
+	^group
+
+]
+
+{ #category : #convenience }
 AkgFFIstuff class >> startConsoleLogging [
 	<script>
 
