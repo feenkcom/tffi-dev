@@ -18,10 +18,27 @@ Class {
 	#name : #ThreadedFFIMigration,
 	#superclass : #Object,
 	#classVars : [
+		'DisableThreadedFFI',
 		'ThreadedFFIAvailable'
 	],
 	#category : #'GToolkit-Iceberg'
 }
+
+{ #category : #managing }
+ThreadedFFIMigration class >> disableThreadedFFI [
+	"Set the flag forcing Threaded FFI to be disabled"
+	<script>
+
+	DisableThreadedFFI := true.
+]
+
+{ #category : #managing }
+ThreadedFFIMigration class >> enableThreadedFFI [
+	"Clear the flag forcing Threaded FFI to be disabled"
+	<script>
+
+	DisableThreadedFFI := false.
+]
 
 { #category : #private }
 ThreadedFFIMigration class >> getThreadedFFIAvailable [
@@ -72,6 +89,10 @@ ThreadedFFIMigration class >> startUp: resuming [
 
 { #category : #accesing }
 ThreadedFFIMigration class >> threadedFFIAvailable [
+	"Answer a boolean indicating whether to use Threaded FFI"
 
+	"If true, DisableThreadedFFI forces Threaded FFI to be NOT used.
+	Allow for nil value (= false)"
+	DisableThreadedFFI == true ifTrue: [ ^false ].
 	^ThreadedFFIAvailable ifNil: [ ThreadedFFIAvailable := self getThreadedFFIAvailable ]
 ]

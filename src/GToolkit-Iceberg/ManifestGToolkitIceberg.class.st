@@ -6,3 +6,8 @@ Class {
 	#superclass : #PackageManifest,
 	#category : #'GToolkit-Iceberg-Manifest'
 }
+
+{ #category : #'code-critics' }
+ManifestGToolkitIceberg class >> ruleRBEqualsTrueRuleV1FalsePositive [
+	^ #(#(#(#RGMethodDefinition #(#'ThreadedFFIMigration class' #threadedFFIAvailable #true)) #'2019-11-08T09:00:01.901475+01:00') )
+]
