@@ -11,7 +11,7 @@ GlutinLibrary >> calloutAPIClass [
 GlutinLibrary >> runner [ 
 
 	^ ThreadedFFIMigration threadedFFIAvailable
-		ifTrue: [ TFSameThreadRunner new ]
+		ifTrue: [ TFSameThreadRunner uniqueInstance ]
 		ifFalse: [ super runner ]
 
 ]
