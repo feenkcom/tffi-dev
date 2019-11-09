@@ -20,26 +20,38 @@ MethodDictionaryConsistencyTest class >> recompileInconsistent [
 
 { #category : #helper }
 MethodDictionaryConsistencyTest >> inconsistentMethodSource [
-	"Iterate over all method definitions and check that the class is internally consistent in that methods defined in both methodDict and localMethods are the same instance of CompiledMethod"
+	"Iterate over all method definitions and check that the class is internally consistent.
+	See MethodSourceComparison>>sourceMatches for a definition of 'consistent'."
 
 	| results |
 
 	results := OrderedCollection new.
 	Object withAllSubclassesDo: [ :class |
-		class localMethods do: [ :localMethod | | comparison |
-			comparison := MethodSourceComparison new
-				localMethods: localMethod;
-				methodDict: (class methodDict at: localMethod selector);
-				ffiRegistry: (FFIMethodRegistry uniqueInstance compiledMethods 
-					like: localMethod);
-				yourself.
-			comparison sourceMatches	
-				ifFalse: [ results add: comparison ] ] ].
+		class isMeta ifFalse:
+			[ results addAll: (self inconsistentMethodSourceIn: class) ] ].
+	^results sorted: [ :a :b | a localMethods methodClass name < b localMethods methodClass name ]
+]
+
+{ #category : #helper }
+MethodDictionaryConsistencyTest >> inconsistentMethodSourceIn: aClass [
+	"Iterate over all method definitions and check that the class is internally consistent.
+	See MethodSourceComparison>>sourceMatches for a definition of 'consistent'."
+
+	| results comparisons |
+
+	results := OrderedCollection new.
+	comparisons := aClass selectors collect: [ :each | 
+		MethodSourceComparison new 
+			subjectClassName: aClass name;
+			selector: each ].
+	comparisons do: [ :each |
+			each sourceMatches	
+				ifFalse: [ results add: each ] ].
 	^results sorted: [ :a :b | a localMethods methodClass name < b localMethods methodClass name ]
 ]
 
 { #category : #tests }
-MethodDictionaryConsistencyTest >> testMethodConistency [
+MethodDictionaryConsistencyTest >> testMethodConsistency [
 
 	self assert: self inconsistentMethodSource size isZero
 ]

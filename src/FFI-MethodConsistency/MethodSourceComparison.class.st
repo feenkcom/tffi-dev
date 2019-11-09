@@ -1,42 +1,17 @@
-"
-In conjunction with MethodDictionaryConsistencyTest, search for all methods where the source code doesn't match between the methods methodDict, localMethods and the FFIMethodRegistry.
-
-Typically:
-
-[[[ 
-MethodDictionaryConsistencyTest new inconsistentMethodSource 
-]]]
-
-to find the offending methods.
-
-A clean image typically has decompiled source in localMethods for a number of methods:
-
-[[[ 
-MethodDictionaryConsistencyTest new inconsistentMethodSource 
-	do: [ :each | each recompileMethodDict ]
-]]]
-
-will recompile these and remove the inconsistent methods.
-"
 Class {
 	#name : #MethodSourceComparison,
 	#superclass : #Object,
 	#instVars : [
-		'methodDict',
-		'localMethods',
-		'ffiRegistry'
+		'subjectClassName',
+		'selector'
 	],
 	#category : #'FFI-MethodConsistency'
 }
 
 { #category : #accessing }
 MethodSourceComparison >> ffiRegistry [
-	^ ffiRegistry
-]
-
-{ #category : #accessing }
-MethodSourceComparison >> ffiRegistry: anObject [
-	ffiRegistry := anObject
+	^ (FFIMethodRegistry uniqueInstance compiledMethods 
+					like: self localMethods)
 ]
 
 { #category : #'as yet unclassified' }
@@ -44,10 +19,10 @@ MethodSourceComparison >> gtFfiRegistrySourceIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	^ composite pharoMethod
 		title: 'ffiRegistry';
-		smalltalkClass: [ ffiRegistry methodClass ];
-		display: [ ffiRegistry sourceCode ];
-		when: [ ffiRegistry isNotNil ];
-		act: [ ffiRegistry browse ]
+		smalltalkClass: [ self ffiRegistry methodClass ];
+		display: [ self ffiRegistry sourceCode ];
+		when: [ self ffiRegistry isNotNil ];
+		act: [ self ffiRegistry browse ]
 			icon: GLMUIThemeExtraIcons glamorousBrowse
 			entitled: 'Browse'
 ]
@@ -57,11 +32,12 @@ MethodSourceComparison >> gtMethodDictSourceIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	^ composite pharoMethod
 		title: 'methodDict';
-		smalltalkClass: [ methodDict methodClass ];
-		display: [ methodDict sourceCode ];
-		act: [ methodDict browse ]
+		smalltalkClass: [ self methodDict methodClass ];
+		display: [ self methodDict sourceCode ];
+		act: [ self methodDict browse ]
 			icon: GLMUIThemeExtraIcons glamorousBrowse
-			entitled: 'Browse'
+			entitled: 'Browse';
+		when: [ self methodDict isNotNil ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -69,78 +45,119 @@ MethodSourceComparison >> gtlocalMethodsSourceIn: composite [
 	<gtInspectorPresentationOrder: 30>
 	^ composite pharoMethod
 		title: 'localMethods';
-		smalltalkClass: [ localMethods methodClass ];
-		display: [ localMethods sourceCode ];
-		act: [ localMethods browse ]
+		smalltalkClass: [ self localMethods methodClass ];
+		display: [ self localMethods sourceCode ];
+		when: [ self localMethods isNotNil ];
+		act: [ self localMethods browse ]
 			icon: GLMUIThemeExtraIcons glamorousBrowse
 			entitled: 'Browse'
 ]
 
 { #category : #accessing }
 MethodSourceComparison >> localMethods [
-	^ localMethods
-]
-
-{ #category : #accessing }
-MethodSourceComparison >> localMethods: anObject [
-	localMethods := anObject
+	^ (Smalltalk at: self subjectClassName) localMethods
+		detect: [ :each | each selector = self selector ]
+		ifNone: [ nil ]
 ]
 
 { #category : #accessing }
 MethodSourceComparison >> methodDict [
-	^ methodDict
-]
-
-{ #category : #accessing }
-MethodSourceComparison >> methodDict: anObject [
-	methodDict := anObject
+	^ (Smalltalk at: self subjectClassName) methodDict at: self selector
 ]
 
 { #category : #printing }
 MethodSourceComparison >> printOn: aStream [
 
-	localMethods ifNil: 
+	self localMethods ifNil: 
 		[ ^super printOn: aStream ].
 
 	aStream
-		print: localMethods;
+		print: self localMethods;
 		<< '(';
 		print: self sourceMatches;
 		<< ')'.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 MethodSourceComparison >> recompileMethodDict [
 	"Recompile the receiver's method based on the source from methodDict iff the source doesn't match"
 
-	| ast messageNodes |
+	| sourceMethod |
 
+	"Return if there's nothing to do"
 	self sourceMatches ifTrue: [ ^self ].
-	ast := methodDict ast.
-	messageNodes := ast allChildren select: [ :each | each class = RBMessageNode ].
-	messageNodes do: [ :messageNode |
-		#(#call: #call:options: #callUnchecked:options:)
-			detect: [ :selector | selector = messageNode selector ] 
-			ifFound: [ methodDict methodClass
-					compile: methodDict sourceCode
-					classified: methodDict protocol ] 
-			ifNone: [  ] ].
+
+	Stdio stdout
+		<< 'recompile: '
+		print: self methodDict;
+		lf; flush.
+
+	"Select the best looking source"
+	sourceMethod := { self methodDict. self localMethods. self ffiRegistry }
+		detect: [ :method | method isNotNil and: [ self sourceSelectorMatchesFor: method ] ]
+		ifNone: [ self methodDict ].
+	"Recompile it"
+	sourceMethod methodClass
+		compile: sourceMethod sourceCode
+		classified: sourceMethod protocol.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+MethodSourceComparison >> selector [
+	^ selector
+]
+
+{ #category : #accessing }
+MethodSourceComparison >> selector: anObject [
+	selector := anObject asSymbol
+]
+
+{ #category : #testing }
 MethodSourceComparison >> sourceMatches [
+	"Answer a boolean indicating whether the receiver is consistent, i.e.:
+	- methodDict, localmethods and ffiRegistry are all the same instance of CompiledMethod.
+	- the source code selector matches the compiled method selector.
+	- the source code has valid parameter names"
 
-	((methodDict ~~ localMethods) and: [ methodDict notNil and: [ localMethods notNil ]]) ifTrue: 
-		[ methodDict sourceCode ~= localMethods sourceCode ifTrue: 
-			[ ^false ] ].
+	((self methodDict ~~ self localMethods) and: [ self methodDict notNil and: [ self localMethods notNil ]]) ifTrue: 
+		[ ^false ].
 
-	((methodDict ~~ ffiRegistry) and: [ methodDict notNil and: [ ffiRegistry notNil ]]) ifTrue: 
-		[ methodDict sourceCode ~= ffiRegistry sourceCode ifTrue: 
-			[ ^false ] ].
+	((self methodDict ~~ self ffiRegistry) and: [ self methodDict notNil and: [ self ffiRegistry notNil ]]) ifTrue: 
+		[ ^false ].
 
-	((ffiRegistry ~~ localMethods) and: [ ffiRegistry notNil and: [ localMethods notNil ]]) ifTrue: 
-		[ ffiRegistry sourceCode ~= localMethods sourceCode ifTrue: 
-			[ ^false ] ].
+	((self ffiRegistry ~~ self localMethods) and: [ self ffiRegistry notNil and: [ self localMethods notNil ]]) ifTrue: 
+		[ ^false ].
 
-	^true
+	^self sourceSelectorMatchesFor: self methodDict.
+
+]
+
+{ #category : #testing }
+MethodSourceComparison >> sourceSelectorMatchesFor: aCompiledMethod [
+	"Answer a boolean indicating whether the selector from the source code on file matches the methods selector and has valid parameter names (a bit simplistic, no 'arg1')"
+
+	| source parseTree |
+
+	source := aCompiledMethod getSourceFromFile.
+	source ifEmpty: [ ^false ].
+	parseTree := RBParser 
+		parseMethod: source
+		onError: [ ^false ].
+	parseTree methodClass: aCompiledMethod methodClass.
+
+	parseTree arguments 
+		detect: [ :each | each name = #arg1 ]
+		ifFound: [ ^false ].
+
+	^true.
+]
+
+{ #category : #accessing }
+MethodSourceComparison >> subjectClassName [
+	^ subjectClassName
+]
+
+{ #category : #accessing }
+MethodSourceComparison >> subjectClassName: anObject [
+	subjectClassName := anObject asSymbol
 ]
