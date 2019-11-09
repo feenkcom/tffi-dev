@@ -17,7 +17,6 @@ BaselineOfGtThreadedFFIDev >> baseline: spec [
 
 		spec 
 			package: #'GToolkit-Iceberg'
-				with: [ spec requires: #(#BeaconFFI) ];
-			package: #'FFI-MethodConsistency' ].
+				with: [ spec requires: #(#BeaconFFI) ] ].
 
 ]
