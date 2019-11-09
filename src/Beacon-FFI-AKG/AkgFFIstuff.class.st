@@ -33,6 +33,29 @@ Class {
 	#category : #'Beacon-FFI-AKG'
 }
 
+{ #category : #'as yet unclassified' }
+AkgFFIstuff class >> gtClipboard [
+	<gtExample>
+	<script>
+
+	| string result clipboard |
+
+	FFIInvokeSignal enabled: true.
+	FFIResultSignal enabled: true.
+	TFFIInvokeSignal enabled: true.
+	TFFIResultSignal enabled: true.
+	string := 'Clipboard test string +ěščřžýáíé='.
+	clipboard := GtClipboard new beDefault.
+	clipboard clipboardText: string.
+	result := clipboard clipboardText.
+	FFIInvokeSignal enabled: false.
+	FFIResultSignal enabled: false.
+	TFFIInvokeSignal enabled: false.
+	TFFIResultSignal enabled: false.
+	self assert: result = string.
+	^result
+]
+
 { #category : #convenience }
 AkgFFIstuff class >> mozCallback [
 	<gtExample>
