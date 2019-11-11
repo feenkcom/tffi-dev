@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'subjectClassName',
-		'selector'
+		'selector',
+		'reason'
 	],
 	#category : #'FFI-MethodConsistency'
 }
@@ -75,6 +76,8 @@ MethodSourceComparison >> printOn: aStream [
 		print: self localMethods;
 		<< '(';
 		print: self sourceMatches;
+		<< ', ';
+		<< reason;
 		<< ')'.
 ]
 
@@ -120,13 +123,16 @@ MethodSourceComparison >> sourceMatches [
 	- the source code has valid parameter names"
 
 	((self methodDict ~~ self localMethods) and: [ self methodDict notNil and: [ self localMethods notNil ]]) ifTrue: 
-		[ ^false ].
+		[ reason := 'methodDict ~~ localMethods'.
+		^false ].
 
 	((self methodDict ~~ self ffiRegistry) and: [ self methodDict notNil and: [ self ffiRegistry notNil ]]) ifTrue: 
-		[ ^false ].
+		[ reason := 'methodDict ~~ ffiRegistry'.
+		^false ].
 
 	((self ffiRegistry ~~ self localMethods) and: [ self ffiRegistry notNil and: [ self localMethods notNil ]]) ifTrue: 
-		[ ^false ].
+		[ reason := 'ffiRegistry ~~ localMethods'.
+		^false ].
 
 	^self sourceSelectorMatchesFor: self methodDict.
 
@@ -139,15 +145,18 @@ MethodSourceComparison >> sourceSelectorMatchesFor: aCompiledMethod [
 	| source parseTree |
 
 	source := aCompiledMethod getSourceFromFile.
-	source ifEmpty: [ ^false ].
+	source ifEmpty: [ reason := 'empty source from file'.
+		^false ].
 	parseTree := RBParser 
 		parseMethod: source
-		onError: [ ^false ].
+		onError: [ reason := 'parser error'.
+		^false ].
 	parseTree methodClass: aCompiledMethod methodClass.
 
 	parseTree arguments 
 		detect: [ :each | each name = #arg1 ]
-		ifFound: [ ^false ].
+		ifFound: [ reason := 'arg1 found'.
+		^false ].
 
 	^true.
 ]
