@@ -12,7 +12,7 @@ Class {
 { #category : #accessing }
 MethodSourceComparison >> ffiRegistry [
 	^ (FFIMethodRegistry uniqueInstance compiledMethods 
-					like: self localMethods)
+					like: self methodDict)
 ]
 
 { #category : #'as yet unclassified' }
@@ -56,7 +56,12 @@ MethodSourceComparison >> gtlocalMethodsSourceIn: composite [
 
 { #category : #accessing }
 MethodSourceComparison >> localMethods [
-	^ (Smalltalk at: self subjectClassName) localMethods
+
+	| subjectClass |
+	
+	subjectClass := (Smalltalk at: self subjectClassName).
+	(subjectClass isKindOf: TraitedMetaclass) ifFalse: [ ^nil ].
+	^subjectClass localMethods
 		detect: [ :each | each selector = self selector ]
 		ifNone: [ nil ]
 ]
@@ -69,11 +74,11 @@ MethodSourceComparison >> methodDict [
 { #category : #printing }
 MethodSourceComparison >> printOn: aStream [
 
-	self localMethods ifNil: 
+	self methodDict ifNil: 
 		[ ^super printOn: aStream ].
 
 	aStream
-		print: self localMethods;
+		print: self methodDict;
 		<< '(';
 		print: self sourceMatches;
 		<< ', ';
@@ -122,18 +127,35 @@ MethodSourceComparison >> sourceMatches [
 	- the source code selector matches the compiled method selector.
 	- the source code has valid parameter names"
 
-	((self methodDict ~~ self localMethods) and: [ self methodDict notNil and: [ self localMethods notNil ]]) ifTrue: 
-		[ reason := 'methodDict ~~ localMethods'.
-		^false ].
+	| matches methodDict localMethods ffiRegistry |
 
-	((self methodDict ~~ self ffiRegistry) and: [ self methodDict notNil and: [ self ffiRegistry notNil ]]) ifTrue: 
-		[ reason := 'methodDict ~~ ffiRegistry'.
-		^false ].
+	reason := ''.
+	methodDict := self methodDict.
+	localMethods := self localMethods.
+	ffiRegistry := self ffiRegistry.
 
-	((self ffiRegistry ~~ self localMethods) and: [ self ffiRegistry notNil and: [ self localMethods notNil ]]) ifTrue: 
-		[ reason := 'ffiRegistry ~~ localMethods'.
-		^false ].
+	ffiRegistry ifNil: [ 
+		localMethods ifNil: [ 
+			"No ffiRegistry, no traits"
+			matches := true.
+			 ] ifNotNil: [ 
+			"localMethods and methodDict should be the same"
+			matches := methodDict == localMethods.
+			matches ifFalse: [ reason := 'methodDict ~~ localMethods' ].
+			 ]
+		 ] ifNotNil: [ 
+			localMethods ifNil: [ 
+				"ffiRegistry, no traits"
+				matches := methodDict == ffiRegistry.
+				matches ifFalse: [ reason := 'methodDict ~~ ffiRegistry' ]
+				 ] ifNotNil: [ 
+				matches := methodDict == ffiRegistry and:
+					[ localMethods == (ffiRegistry propertyAt: #ffiNonCompiledMethod) ].
+				matches ifFalse: [ reason := 'methodDict ~~ ffiRegistry or ffiNonCompiledMethod mismatch' ]
+				 ]
+		 ].
 
+	matches ifFalse: [ ^false ].
 	^self sourceSelectorMatchesFor: self methodDict.
 
 ]
@@ -145,20 +167,15 @@ MethodSourceComparison >> sourceSelectorMatchesFor: aCompiledMethod [
 	| source parseTree |
 
 	source := aCompiledMethod getSourceFromFile.
-	source ifEmpty: [ reason := 'empty source from file'.
+	source ifEmpty: [ reason := reason, ', empty source from file'.
 		^false ].
 	parseTree := RBParser 
 		parseMethod: source
-		onError: [ reason := 'parser error'.
+		onError: [ reason := reason, ', parser error'.
 		^false ].
 	parseTree methodClass: aCompiledMethod methodClass.
 
-	parseTree arguments 
-		detect: [ :each | each name = #arg1 ]
-		ifFound: [ reason := 'arg1 found'.
-		^false ].
-
-	^true.
+	^parseTree selector == aCompiledMethod selector.
 ]
 
 { #category : #accessing }
