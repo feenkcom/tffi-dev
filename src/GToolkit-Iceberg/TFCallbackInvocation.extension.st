@@ -5,7 +5,7 @@ TFCallbackInvocation >> execute [
 	|  returnValue |
 
 	TFFICallbackSignal new 
-		block: callback frontendCallback block;
+		block: callback frontendCallback;
 		arguments: self arguments;
 		emit.
 	returnValue := callback frontendCallback valueWithArguments: self arguments.

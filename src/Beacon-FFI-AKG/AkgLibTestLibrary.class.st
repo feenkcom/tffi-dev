@@ -29,7 +29,7 @@ AkgLibTestLibrary >> macModuleName [
 AkgLibTestLibrary >> runner [ 
 
 	^ ThreadedFFIMigration threadedFFIAvailable
-		ifTrue: [ TFSameThreadRunner new ]
+		ifTrue: [ TFSameThreadRunner uniqueInstance ]
 		ifFalse: [ super runner ]
 
 ]

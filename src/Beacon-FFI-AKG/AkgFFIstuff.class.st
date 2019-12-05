@@ -249,7 +249,7 @@ AkgFFIstuff >> libraryPath [
 { #category : #accessing }
 AkgFFIstuff >> runner [
 
-	^runner ifNil: [ runner := TFSameThreadRunner new ]
+	^runner ifNil: [ runner := TFSameThreadRunner uniqueInstance ]
 ]
 
 { #category : #tests }
