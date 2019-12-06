@@ -10,6 +10,9 @@ The latest version may be retrieved with zeroconf:
 curl get.pharo.org/64/80+vmHeadlessLatest | bash
 ```
 
+Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
+
+
 Start Pharo in the normal manner:
 
 ```
@@ -51,7 +54,20 @@ userName ifNotNil: [
 It would then be worthwhile to repair the repository and create a branch from the image's commit (to be automated).
 
 
-Load Threaded FFI, Iceberg / libgit extensions:
+Load Gtoolkit as normal:
+
+```
+EpMonitor current disable.
+[ 
+  Metacello new
+    baseline: 'GToolkit';
+    repository: 'github://feenkcom/gtoolkit/src';
+    load
+] ensure: [ EpMonitor current enable ].
+```
+
+
+Load Threaded FFI and extensions:
 
 ```
 EpMonitor current disable.
@@ -71,26 +87,23 @@ MethodDictionaryConsistencyTest recompileInconsistent.
 ] ensure: [ EpMonitor current enable ].
 ```
 
-Gtoolkit and other packages can then be loaded as normal:
-
-```
-EpMonitor current disable.
-[ 
-  Metacello new
-    baseline: 'GToolkit';
-    repository: 'github://feenkcom/gtoolkit/src';
-    load
-] ensure: [ EpMonitor current enable ].
-```
-
-
 To then run Pharo with Bloc graphics:
 
 ```
-./pharo Pharo.image eval --no-quit 'UIManager default: BlBlocUIManager new. GtWorld open.'
+./pharo Pharo.image eval --interactive --no-quit "GtWorld open."
 ```
 
 To run Pharo with the old Morphic world:
+
+1. Disable the suppression of the old morphic windowing system:
+
+```
+BlNullWorldRenderer disable.
+```
+
+save the image.
+
+2. Start the image with the old morphic windowing system:
 
 ```
 ./pharo-ui Pharo.image
