@@ -2,6 +2,7 @@
 
 Temporary repository while we get Pharo 8 working with Threaded FFI.
 
+
 ## Load in Pharo8 with headless vm
 
 The latest version may be retrieved with zeroconf:
@@ -12,80 +13,18 @@ curl get.pharo.org/64/80+vmHeadlessLatest | bash
 
 Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
 
+Download `gt-tffi.st` (in this repository) to the same directory as your Pharo image.
 
-Start Pharo in the normal manner:
-
-```
-./pharo-ui Pharo.image
-```
-
-
-Since `tffi-dev` over-writes methods in the core repositories it is worthwhile having access to the history there:
+Load Gtoolkit, TFFI and extensions:
 
 ```
-| iceRep repository remoteUrl location subdirectory userName projectName githubRepository remote |
-
-"If you have a private fork of the pharo repository, set your username below (as a String) and it will be added as a remote"
-userName := nil.
-projectName := 'pharo'.
-
-repository := IceRepository registry detect: [ :each | each name = 'pharo' ].
-remoteUrl := 'git@github.com:pharo-project/pharo.git'.
-location := (FileLocator imageDirectory / 'pharo-local/iceberg/pharo-project/pharo') resolve.
-subdirectory := 'src'.
-iceRep := IceRepositoryCreator new 
-				repository: repository;
-				remote: (IceGitRemote url: remoteUrl);
-				location: location;
-				subdirectory: subdirectory;
-				createRepository.
-
-
-userName ifNotNil: [ 
-	githubRepository := IceGitHubAPI new 
-		beAnonymous;
-		getRepository: userName project: projectName.
-	remoteUrl := 'git@github.com:', userName, '/pharo.git'.
-	remote := IceGitRemote name: userName url: remoteUrl.
-	repository addRemote: remote.
-	remote fetch ].
+./pharo Pharo.image eval --save "'gt-tffi.st' asFileReference fileIn."
 ```
 
-It would then be worthwhile to repair the repository and create a branch from the image's commit (to be automated).
+Note: loading should be performed in headless mode (as above) to prevent UI code from attempting to use [T]FFI while it is being modified.
 
 
-Load Gtoolkit as normal:
-
-```
-EpMonitor current disable.
-[ 
-  Metacello new
-    baseline: 'GToolkit';
-    repository: 'github://feenkcom/gtoolkit/src';
-    load
-] ensure: [ EpMonitor current enable ].
-```
-
-
-Load Threaded FFI and extensions:
-
-```
-EpMonitor current disable.
-[ 
-Metacello new
-	baseline: 'ThreadedFFI';
-	repository: 'github://pharo-project/threadedFFI-Plugin/src';
-	load.
-
-Metacello new
-	baseline: 'GtThreadedFFIDev';
-	repository: 'github://feenkcom/tffi-dev/src';
-	load.
-
-MethodDictionaryConsistencyTest recompileInconsistent.
-
-] ensure: [ EpMonitor current enable ].
-```
+## Running Gtoolkit with native windows
 
 To then run Pharo with Bloc graphics:
 
@@ -93,9 +32,14 @@ To then run Pharo with Bloc graphics:
 ./pharo Pharo.image eval --interactive --no-quit "GtWorld open."
 ```
 
+
+## Running Gtoolkit with the old morphic interface
+
 To run Pharo with the old Morphic world:
 
 1. Disable the suppression of the old morphic windowing system:
+
+Start pharo using a standard VM (available with `curl get.pharo.org/64/vm80 | bash`).
 
 ```
 BlNullWorldRenderer disable.
