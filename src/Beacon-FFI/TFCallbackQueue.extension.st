@@ -7,6 +7,6 @@ TFCallbackQueue >> executeCallback: aCallbackInvocation [
 	aCallbackInvocation getHandle isNull ifTrue: [ ^self ].
 	
 	aCallbackInvocation callback: (self lookupCallback: aCallbackInvocation callbackData).
-	StringSignal emit: 'executeCallback: ', aCallbackInvocation callback callbackData printString.
+	"StringSignal emit: 'executeCallback: ', aCallbackInvocation callback callbackData printString."
 	aCallbackInvocation runner executeCallback: aCallbackInvocation
 ]
