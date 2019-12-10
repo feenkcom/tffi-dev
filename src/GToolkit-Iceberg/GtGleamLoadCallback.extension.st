@@ -1,7 +1,7 @@
-Extension { #name : #GlutinEventCallback }
+Extension { #name : #GtGleamLoadCallback }
 
 { #category : #'*GToolkit-Iceberg' }
-GlutinEventCallback >> calloutAPIClass [
+GtGleamLoadCallback >> calloutAPIClass [
 
 	^ ThreadedFFIMigration threadedFFIAvailable
 		ifTrue: [ TFCalloutAPI ]
@@ -9,17 +9,17 @@ GlutinEventCallback >> calloutAPIClass [
 ]
 
 { #category : #'*GToolkit-Iceberg' }
-GlutinEventCallback class >> ffiLibrary [
-
-	^ ThreadedFFIMigration threadedFFIAvailable
-		ifTrue: [ GlutinLibrary ]
-		ifFalse: [ super ffiLibraryName ]
-]
-
-{ #category : #'*GToolkit-Iceberg' }
-GlutinEventCallback >> ffiLibrary [
+GtGleamLoadCallback >> ffiLibrary [
 
 	^ ThreadedFFIMigration threadedFFIAvailable
 		ifTrue: [ self class ffiLibrary ]
 		ifFalse: [ super ffiLibrary ]
+]
+
+{ #category : #'*GToolkit-Iceberg' }
+GtGleamLoadCallback class >> ffiLibrary [
+
+	^ ThreadedFFIMigration threadedFFIAvailable
+		ifTrue: [ GtGleamLibrary ]
+		ifFalse: [ super ffiLibraryName ]
 ]

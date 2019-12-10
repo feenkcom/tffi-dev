@@ -77,6 +77,13 @@ AkgFFIstuff class >> mozCallback [
 	^result
 ]
 
+{ #category : #printing }
+AkgFFIstuff class >> printAllStacks [
+
+	<primitive: 'primitivePrintAllStacks' module: 'PThreadedPlugin' error: ec>
+	self primitiveFailed: ec
+]
+
 { #category : #convenience }
 AkgFFIstuff class >> skiaExamples [
 	<gtExample>
