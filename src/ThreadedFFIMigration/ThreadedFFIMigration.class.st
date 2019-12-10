@@ -21,7 +21,7 @@ Class {
 		'DisableThreadedFFI',
 		'ThreadedFFIAvailable'
 	],
-	#category : #'GToolkit-Iceberg'
+	#category : #ThreadedFFIMigration
 }
 
 { #category : #managing }
