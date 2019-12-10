@@ -46,16 +46,14 @@ ThreadedFFIMigration class >> getThreadedFFIAvailable [
 
 	| result ba |
 
-	result := false.
-	[ 
+	result := [ 
 		ba := #[1 2 3].
 		ba pinInMemory.
 		PointerUtils oopForObject: ba.
 		ba unpinInMemory.
-		result := true.
-	]
+		true ]
 			on: Error 
-			do: [ ].
+			do: [ false ].
 	^result
 ]
 
