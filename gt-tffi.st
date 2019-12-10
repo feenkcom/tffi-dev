@@ -34,6 +34,11 @@ userName ifNotNil: [
 EpMonitor disableDuring:
 [ 
 Metacello new
+	baseline: 'ThreadedFFIMigration';
+	repository: 'github://feenkcom/tffi-dev/src';
+	load.
+
+Metacello new
 	baseline: 'GToolkit';
 	repository: 'github://feenkcom/gtoolkit/src';
 	load.
