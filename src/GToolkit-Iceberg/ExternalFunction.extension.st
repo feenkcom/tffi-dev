@@ -14,7 +14,7 @@ ExternalFunction >> invokeWithArguments: argArray [
 	| result |
 
 	(Smalltalk includesKey: #FFIInvokeSignal) ifFalse: 
-		[ self primInvokeWithArguments: argArray ].
+		[ ^self primInvokeWithArguments: argArray ].
 
 	FFIInvokeSignal new
 		function: self;
