@@ -1,11 +1,13 @@
 # tffi-dev
 
-Temporary repository while we get Pharo 8 working with Threaded FFI.
+tffi-dev contains the extensions to core Pharo to get Iceberg working with Threaded FFI.
 
 
-## Load in Pharo8 with headless vm
+## Using Gtoolkit with Threaded FFI
 
-The latest version may be retrieved with zeroconf:
+As of 13 December 2019 Gtoolkit loads Threaded FFI automatically, however it is initially disabled (since changing a library from using Squeak FFI to Threaded FFI requires the image be restarted).
+
+Ensure you have the current headless VM:
 
 ```
 curl get.pharo.org/64/80+vmHeadlessLatest | bash
@@ -13,16 +15,15 @@ curl get.pharo.org/64/80+vmHeadlessLatest | bash
 
 Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
 
-Download `gt-tffi.st` (in this repository) to the same directory as your Pharo image.
+Load Gtoolkit following the instructions to load the latest alpha code in Pharo 8.0 at: https://gtoolkit.com/install/
 
-Load Gtoolkit, TFFI and extensions:
+Save the image and quit.
+
+Enable Threaded FFI:
 
 ```
-./pharo Pharo.image eval --save "'gt-tffi.st' asFileReference fileIn."
+pharo Pharo.image eval --save "ThreadedFFIMigration enableThreadedFFI"
 ```
-
-Note: loading should be performed in headless mode (as above) to prevent UI code from attempting to use [T]FFI while it is being modified.
-
 
 ## Running Gtoolkit with native windows
 
@@ -51,4 +52,34 @@ save the image.
 
 ```
 ./pharo-ui Pharo.image
+```
+
+
+## Enabling Threaded FFI in a standard Pharo image
+
+Ensure you have the current headless VM:
+
+```
+curl get.pharo.org/64/80+vmHeadlessLatest | bash
+```
+
+Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
+
+To load Threaded FFI in a standard image:
+
+```
+EpMonitor disableDuring:
+[ 
+Metacello new
+	baseline: 'GtThreadedFFIDev';
+	repository: 'github://feenkcom/tffi-dev/src';
+	load.
+].
+```
+Save the image and quit.
+
+Enable Threaded FFI:
+
+```
+pharo Pharo.image eval --save "ThreadedFFIMigration enableThreadedFFI"
 ```
