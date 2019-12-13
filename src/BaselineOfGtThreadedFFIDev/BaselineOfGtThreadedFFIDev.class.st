@@ -4,21 +4,16 @@ Class {
 	#category : #BaselineOfGtThreadedFFIDev
 }
 
-{ #category : #baselines }
+{ #category : #baseline }
 BaselineOfGtThreadedFFIDev >> baseline: spec [
 	<baseline>
-
 	spec for: #'common' do: [
-		"There's temporary logging scattered through during early development.
-		The need for Beacon-FFI should be removed eventually."
 		spec 
-			baseline: #BeaconFFI
-				with: [ spec repository: 'github://feenkcom/tffi-dev/src' ];
-			baseline: #ThreadedFFI 
-				with: [ spec repository: 'github://feenkcom/threadedFFI-Plugin' ].
-
-		spec 
-			package: #'GToolkit-Iceberg'
-				with: [ spec requires: #(#ThreadedFFI #BeaconFFI) ] ].
+			baseline: #BeaconFFI with: [
+				spec repository: 'github://feenkcom/tffi-dev:v0.6.0/src' ];
+			baseline: #ThreadedFFI with: [
+				spec repository: 'github://feenkcom/threadedFFI-Plugin:v0.6.0' ].
+		spec package: #'GToolkit-Iceberg' with: [
+				spec requires: #(#ThreadedFFI #BeaconFFI ). ]. ].
 
 ]

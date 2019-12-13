@@ -4,19 +4,12 @@ Class {
 	#category : #BaselineOfBeaconFFI
 }
 
-{ #category : #baselines }
-BaselineOfBeaconFFI >> baseline: spec [ 
+{ #category : #baseline }
+BaselineOfBeaconFFI >> baseline: spec [
 	<baseline>
+	spec for: #'common' do: [
+		spec baseline: 'Beacon' with: [
+				spec repository: 'github://feenkcom/pharo-beacon:38cb3436c9593de5abd580b8bb23d06753afdb33/repository' ].
+		spec package: 'Beacon-FFI'. ].
 
-	spec for: #common do: [ 
-		spec
-			baseline: 'Beacon'
-			with: [ spec repository: 'github://feenkcom/pharo-beacon/repository' ].
-
-		spec 
-			package: 'Beacon-FFI';
-			group: 'Core' with: #(#Beacon #'Beacon-FFI');
-			group: 'all' with: #(#Core);
-			group: 'default' with: #(#all).
-		 ]
 ]
