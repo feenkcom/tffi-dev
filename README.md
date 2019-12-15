@@ -1,11 +1,12 @@
 # tffi-dev
 
-tffi-dev contains the extensions to core Pharo to get Iceberg working with Threaded FFI.
+tffi-dev contains the extensions to core Pharo to get Iceberg / LibGit working with Threaded FFI.
 
+The code relies on a modified version of `libPThreadedPlugin.so` with a single `callbackStack`.
 
-## Using Gtoolkit with Threaded FFI
+While the code can be loaded, it will not function until the modified library is present.
 
-As of 13 December 2019 Gtoolkit loads Threaded FFI automatically, however it is initially disabled (since changing a library from using Squeak FFI to Threaded FFI requires the image be restarted).
+## Build a base Threaded FFI enabled Pharo 8 Image
 
 Ensure you have the current headless VM:
 
@@ -15,15 +16,57 @@ curl get.pharo.org/64/80+vmHeadlessLatest | bash
 
 Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
 
-Load Gtoolkit following the instructions to load the latest alpha code in Pharo 8.0 at: https://gtoolkit.com/install/
-
-Save the image and quit.
-
-Enable Threaded FFI:
+Copy the following in to a script, e.g. `tffi.st`:
 
 ```
-pharo Pharo.image eval --save "ThreadedFFIMigration enableThreadedFFI"
+"Load Threaded FFI and the extensions for LibGit"
+EpMonitor disableDuring:
+[ 
+Metacello new
+	baseline: 'GtThreadedFFIDev';
+	repository: 'github://feenkcom/tffi-dev/src';
+	load.
+].
+
+"Alien callbacks and Threaded FFI callbacks may not be used in the same session.
+The following message send must be the last thing executed before saving the image and quitting."
+ThreadedFFIMigration enableThreadedFFI.
 ```
+
+Run the script with the following:
+
+```
+pharo Pharo.image ../tffi.st --save --quit
+```
+
+
+## Using Gtoolkit with Threaded FFI
+
+As of 13 December 2019 Gtoolkit loads Threaded FFI automatically, so the equivalent script may be used
+
+Ensure you have the current headless VM:
+
+```
+curl get.pharo.org/64/80+vmHeadlessLatest | bash
+```
+
+Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
+
+```
+EpMonitor disableDuring:
+[ 
+  Metacello new
+    baseline: 'GToolkit';
+    repository: 'github://feenkcom/gtoolkit/src';
+    load.
+
+].
+
+"Alien callbacks and Threaded FFI callbacks may not be used in the same session.
+The following message send must be the last thing executed before saving the image and quitting."
+ThreadedFFIMigration enableThreadedFFI.
+```
+
 
 ## Running Gtoolkit with native windows
 
@@ -52,34 +95,4 @@ save the image.
 
 ```
 ./pharo-ui Pharo.image
-```
-
-
-## Enabling Threaded FFI in a standard Pharo image
-
-Ensure you have the current headless VM:
-
-```
-curl get.pharo.org/64/80+vmHeadlessLatest | bash
-```
-
-Replace `libPThreadedPlugin.so` with the single `callbackStack` version - available on request. :-)
-
-To load Threaded FFI in a standard image:
-
-```
-EpMonitor disableDuring:
-[ 
-Metacello new
-	baseline: 'GtThreadedFFIDev';
-	repository: 'github://feenkcom/tffi-dev/src';
-	load.
-].
-```
-Save the image and quit.
-
-Enable Threaded FFI:
-
-```
-pharo Pharo.image eval --save "ThreadedFFIMigration enableThreadedFFI"
 ```
