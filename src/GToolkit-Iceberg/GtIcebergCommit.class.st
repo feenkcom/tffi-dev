@@ -60,6 +60,16 @@ GtIcebergCommit >> doCommit [
 
 ]
 
+{ #category : #accessing }
+GtIcebergCommit >> executeCommit [
+	|diff|
+	diff := self repository workingCopyDiff.
+	self repository workingCopy 
+		commitChanges: diff
+		withMessage: 'First commit from gt'
+		force: true.
+]
+
 { #category : #ui }
 GtIcebergCommit >> gtActionCommitFor: anAction [
 	<gtAction>
@@ -68,7 +78,15 @@ GtIcebergCommit >> gtActionCommitFor: anAction [
 		label: 'Commit';
 		action: [ :aButton | 
 			aButton phlow spawnObject: 
-				self doCommit ]
+				self executeCommit ]
+]
+
+{ #category : #accessing }
+GtIcebergCommit >> gtMessageEditorFor: aView [
+	<gtView>
+	^ aView document
+		title: 'Message';
+		text: [commitMessage]
 ]
 
 { #category : #accessing }
