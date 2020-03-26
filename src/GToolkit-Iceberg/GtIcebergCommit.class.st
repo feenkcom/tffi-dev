@@ -67,7 +67,8 @@ GtIcebergCommit >> executeCommit [
 	self repository workingCopy 
 		commitChanges: diff
 		withMessage: self commitMessage
-		force: true.
+		force: false.
+	Iceberg announcer announce: (IceRepositoryModified for: self repository).
 ]
 
 { #category : #ui }
