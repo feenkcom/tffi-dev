@@ -64,11 +64,12 @@ GtIcebergCommit >> doCommit [
 GtIcebergCommit >> executeCommit [
 	|diff|
 	diff := self repository workingCopyDiff.
+	Iceberg announcer announce: (IceRepositoryModified for: self repository).
 	self repository workingCopy 
 		commitChanges: diff
 		withMessage: self commitMessage
 		force: false.
-	Iceberg announcer announce: (IceRepositoryModified for: self repository).
+	
 ]
 
 { #category : #ui }
