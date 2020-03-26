@@ -66,14 +66,14 @@ GtIcebergCommit >> executeCommit [
 	diff := self repository workingCopyDiff.
 	self repository workingCopy 
 		commitChanges: diff
-		withMessage: 'First commit from gt'
+		withMessage: self commitMessage
 		force: true.
 ]
 
 { #category : #ui }
 GtIcebergCommit >> gtActionCommitFor: anAction [
 	<gtAction>
-
+	"self commitMessage ifNil: [ ^ anAction  ]."
 	^ anAction button
 		label: 'Commit';
 		action: [ :aButton | 
@@ -84,9 +84,14 @@ GtIcebergCommit >> gtActionCommitFor: anAction [
 { #category : #accessing }
 GtIcebergCommit >> gtMessageEditorFor: aView [
 	<gtView>
-	^ aView document
+	^ aView explicit
 		title: 'Message';
-		text: [commitMessage]
+		stencil: [
+			|editor|
+			editor := BrEditor new look: BrGlamorousRegularEditorLook new.
+			editor text: commitMessage.
+			editor editor when: BrTextEditorModifiedEvent do: [ :anEvent | self commitMessage: anEvent text asString ].
+			editor]
 ]
 
 { #category : #accessing }
