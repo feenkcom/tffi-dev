@@ -60,15 +60,40 @@ GtIcebergCommit >> doCommit [
 
 ]
 
+{ #category : #accessing }
+GtIcebergCommit >> executeCommit [
+	|diff|
+	diff := self repository workingCopyDiff.
+	Iceberg announcer announce: (IceRepositoryModified for: self repository).
+	self repository workingCopy 
+		commitChanges: diff
+		withMessage: self commitMessage
+		force: false.
+	
+]
+
 { #category : #ui }
 GtIcebergCommit >> gtActionCommitFor: anAction [
 	<gtAction>
-
+	"self commitMessage ifNil: [ ^ anAction  ]."
 	^ anAction button
 		label: 'Commit';
 		action: [ :aButton | 
 			aButton phlow spawnObject: 
-				self doCommit ]
+				self executeCommit ]
+]
+
+{ #category : #accessing }
+GtIcebergCommit >> gtMessageEditorFor: aView [
+	<gtView>
+	^ aView explicit
+		title: 'Message';
+		stencil: [
+			|editor|
+			editor := BrEditor new look: BrGlamorousRegularEditorLook new.
+			editor text: commitMessage.
+			editor editor when: BrTextEditorModifiedEvent do: [ :anEvent | self commitMessage: anEvent text asString ].
+			editor]
 ]
 
 { #category : #accessing }
