@@ -6,23 +6,8 @@ Class {
 		'arguments',
 		'return'
 	],
-	#classVars : [
-		'Enabled'
-	],
 	#category : #'Beacon-FFI'
 }
-
-{ #category : #accessing }
-TFFIInvokeSignal class >> enabled [ 
-
-	^Enabled ifNil: [ false ].
-]
-
-{ #category : #accessing }
-TFFIInvokeSignal class >> enabled: aBoolean [
-
-	Enabled := aBoolean
-]
 
 { #category : #accessing }
 TFFIInvokeSignal >> arguments [
@@ -32,18 +17,6 @@ TFFIInvokeSignal >> arguments [
 { #category : #accessing }
 TFFIInvokeSignal >> arguments: anObject [
 	arguments := anObject
-]
-
-{ #category : #'instance creation' }
-TFFIInvokeSignal >> emit [ 
-
-	self enabled ifTrue: [ super emit ].
-]
-
-{ #category : #accessing }
-TFFIInvokeSignal >> enabled [ 
-
-	^Enabled ifNil: [ false ]
 ]
 
 { #category : #accessing }

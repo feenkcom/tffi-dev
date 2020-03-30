@@ -12,30 +12,6 @@ Class {
 }
 
 { #category : #accessing }
-FFIResultSignal class >> enabled [ 
-
-	^Enabled ifNil: [ false ].
-]
-
-{ #category : #accessing }
-FFIResultSignal class >> enabled: aBoolean [
-
-	Enabled := aBoolean
-]
-
-{ #category : #'instance creation' }
-FFIResultSignal >> emit [ 
-
-	self enabled ifTrue: [ super emit ].
-]
-
-{ #category : #accessing }
-FFIResultSignal >> enabled [ 
-
-	^Enabled ifNil: [ false ]
-]
-
-{ #category : #accessing }
 FFIResultSignal >> function [
 	^ function
 ]
