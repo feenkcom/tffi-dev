@@ -19,6 +19,6 @@ IceLibgitRepository >> gtActionCommitFor: anAction [
 				addChild: editor;
 				addChild: (BrButton new look: BrGlamorousButtonWithIconLook; icon: BrGlamorousIcons accept asElement; label: 'Commit'; action: [
 				self executeCommit:  (editor editor text asString).
-				dropdown close.
+				"dropdown close."
 				"b phlow spawnObject: (GtIcebergCommit on: self)" " ((XMLDOMParser parse: self contents) xpath: editor editor text asString)" ])] 
 ]
