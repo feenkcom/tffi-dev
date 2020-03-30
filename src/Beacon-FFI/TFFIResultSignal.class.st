@@ -5,35 +5,8 @@ Class {
 		'function',
 		'result'
 	],
-	#classVars : [
-		'Enabled'
-	],
 	#category : #'Beacon-FFI'
 }
-
-{ #category : #accessing }
-TFFIResultSignal class >> enabled [ 
-
-	^Enabled ifNil: [ false ].
-]
-
-{ #category : #accessing }
-TFFIResultSignal class >> enabled: aBoolean [
-
-	Enabled := aBoolean
-]
-
-{ #category : #'instance creation' }
-TFFIResultSignal >> emit [ 
-
-	self enabled ifTrue: [ super emit ].
-]
-
-{ #category : #accessing }
-TFFIResultSignal >> enabled [ 
-
-	^Enabled ifNil: [ false ]
-]
 
 { #category : #accessing }
 TFFIResultSignal >> function [

@@ -12,18 +12,6 @@ Class {
 }
 
 { #category : #accessing }
-FFICallbackSignal class >> enabled [ 
-
-	^Enabled ifNil: [ false ].
-]
-
-{ #category : #accessing }
-FFICallbackSignal class >> enabled: aBoolean [
-
-	Enabled := aBoolean
-]
-
-{ #category : #accessing }
 FFICallbackSignal >> arguments [
 	^ arguments
 ]
@@ -41,18 +29,6 @@ FFICallbackSignal >> block [
 { #category : #accessing }
 FFICallbackSignal >> block: anObject [
 	block := anObject
-]
-
-{ #category : #'instance creation' }
-FFICallbackSignal >> emit [ 
-
-	self enabled ifTrue: [ super emit ].
-]
-
-{ #category : #accessing }
-FFICallbackSignal >> enabled [ 
-
-	^Enabled ifNil: [ false ]
 ]
 
 { #category : #printing }
