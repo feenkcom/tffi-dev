@@ -7,6 +7,46 @@ Because there can be so many calls made (e.g. every graphics operation and pulse
 FFIInvokeSignal enabled: true
 ]]]
 
+To call this signal modify TFRunner>>invokeFunction:withArguments: 
+
+[[[ 
+""executing""
+invokeFunction: aTFExternalFunction withArguments: aCollection 
+
+	| result |
+
+	(Smalltalk includesKey: #TFFIInvokeSignal) ifFalse: 
+		[ ^aTFExternalFunction newCall
+			parameters: aCollection;
+			executeOn: self ].
+
+	TFFIInvokeSignal new
+		function: aTFExternalFunction;
+		arguments: aCollection;
+		emit.
+
+	result := aTFExternalFunction newCall
+		parameters: aCollection;
+		executeOn: self.
+
+	TFFIResultSignal new
+		function: aTFExternalFunction;
+		result: result;
+		emit.
+	^result
+]]]
+
+
+
+[[[
+""*GToolkit-Iceberg""
+primInvokeWithArguments: argArray
+	""Manually invoke the receiver, representing an external function.""
+	<primitive: 'primitiveCalloutWithArgs' module: 'SqueakFFIPrims' error: ec>
+	^self externalCallFailed
+]]]
+
+
 Public API and Key Messages
 
 - message one   

@@ -10,3 +10,9 @@ AkgShortCallOut >> shortCallout [
 	^self
 		ffiCall: #(int shortCallout #())
 ]
+
+{ #category : #tests }
+AkgShortCallOut >> singleCallToCallback: callback value: value [
+
+	^ self ffiCall: #(int singleCallToCallback(void* callback, int value))
+]

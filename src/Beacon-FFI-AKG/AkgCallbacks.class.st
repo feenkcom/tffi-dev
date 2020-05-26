@@ -4,18 +4,10 @@ Class {
 	#category : #'Beacon-FFI-AKG'
 }
 
-{ #category : #'library path' }
-AkgCallbacks class >> ffiLibrary [
-
-	^ ThreadedFFIMigration threadedFFIAvailable
-		ifTrue: [ AkgLibTestLibrary ]
-		ifFalse: [ super ffiLibraryName ]
-]
-
 { #category : #'instance creation' }
 AkgCallbacks class >> on: aBlock [
 	^ self 
-		signature: self fnSpec 
+		newCallbackWithSignature: self fnSpec 
 		block: aBlock 
 ]
 

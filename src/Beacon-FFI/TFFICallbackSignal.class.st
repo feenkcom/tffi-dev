@@ -1,3 +1,30 @@
+"
+Since callbacks can be called a lot, and this logging isn't required most of the time the code to call it needs to be added in TFCallbackInvocation:
+
+[[[ 
+""operations""
+execute 
+	|  returnValue |
+
+	TFFICallbackSignal new 
+		block: callback frontendCallback;
+		arguments: self arguments;
+		emit.
+	returnValue := callback frontendCallback valueWithArguments: self arguments.
+	TFFIResultSignal new
+		function: callback frontendCallback;
+		result: returnValue;
+		emit.
+
+	self isNull 
+		ifTrue: [ ^ self  ].
+
+	callback returnType isVoid 
+		ifFalse: [ self writeReturnValue: returnValue ].
+
+	self runner returnCallback: self
+]]]
+"
 Class {
 	#name : #TFFICallbackSignal,
 	#superclass : #BeaconSignal,

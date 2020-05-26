@@ -130,6 +130,15 @@ AkgFFIstuff class >> startLogging [
 ]
 
 { #category : #convenience }
+AkgFFIstuff class >> stopConsoleLogging [
+	<script>
+
+	RestartingStreamLogger stop.
+	SignalLogger resetAllInstances.
+
+]
+
+{ #category : #convenience }
 AkgFFIstuff class >> stopFFILogging [
 	<script>
 
