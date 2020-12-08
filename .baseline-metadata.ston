@@ -1,1 +1,1 @@
-{	"repositories" : {		"github://feenkcom/threadedFFI-Plugin" : "v0.8.2",		"github://feenkcom/pharo-beacon/repository" : "7c2cc6ba425a710274d0ca9578cac41aea84e9fb"	}}
+{	"repositories" : {		"github://feenkcom/threadedFFI-Plugin" : "v0.8.3",		"github://feenkcom/pharo-beacon/repository" : "7c2cc6ba425a710274d0ca9578cac41aea84e9fb"	}}
