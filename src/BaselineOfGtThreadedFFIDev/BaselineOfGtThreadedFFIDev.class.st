@@ -10,7 +10,7 @@ BaselineOfGtThreadedFFIDev >> baseline: spec [
 	spec for: #'common' do: [
 		spec 
 			baseline: #BeaconFFI with: [
-				spec repository: 'github://feenkcom/tffi-dev:v0.8.5/src' ];
+				spec repository: 'github://feenkcom/tffi-dev:v0.8.6/src' ];
 			baseline: #ThreadedFFI with: [
 				spec repository: 'github://feenkcom/threadedFFI-Plugin:v0.8.4' ].
 		spec package: #'GToolkit-Iceberg' with: [
