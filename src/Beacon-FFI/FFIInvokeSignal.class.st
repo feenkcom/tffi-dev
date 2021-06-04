@@ -3,9 +3,9 @@ Signal function calls made through FFI.
 
 Because there can be so many calls made (e.g. every graphics operation and pulse) the signal includes a flag that disables the signal from being emitted.  The signal is disabled by default.  To enable the signal:
 
-[[[ 
+``` 
 FFIInvokeSignal enabled: true
-]]]
+```
 
 Public API and Key Messages
 
@@ -23,6 +23,7 @@ Internal Representation and Key Implementation Points.
 
 
     Implementation Points
+
 "
 Class {
 	#name : #FFIInvokeSignal,
