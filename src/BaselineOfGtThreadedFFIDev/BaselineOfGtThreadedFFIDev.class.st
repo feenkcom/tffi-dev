@@ -13,12 +13,10 @@ BaselineOfGtThreadedFFIDev >> baseline: spec [
 		The need for Beacon-FFI should be removed eventually."
 		spec 
 			baseline: #BeaconFFI
-				with: [ spec repository: 'github://feenkcom/tffi-dev/src' ];
-			baseline: #ThreadedFFI 
-				with: [ spec repository: 'github://feenkcom/threadedFFI-Plugin' ].
+				with: [ spec repository: 'github://feenkcom/tffi-dev/src' ].
 
 		spec 
 			package: #'GToolkit-Iceberg'
-				with: [ spec requires: #(#ThreadedFFI #BeaconFFI) ] ].
+				with: [ spec requires: #(#BeaconFFI) ] ].
 
 ]
